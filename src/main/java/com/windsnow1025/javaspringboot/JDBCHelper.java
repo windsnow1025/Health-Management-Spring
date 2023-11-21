@@ -103,7 +103,7 @@ public class JDBCHelper {
     }
 
     private int getCurrentDatabaseVersion() {
-        return 0;
+        return 1; // The version should be included in database
     }
 
     public void closeConnection() {

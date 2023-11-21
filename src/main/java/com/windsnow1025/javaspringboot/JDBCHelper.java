@@ -28,50 +28,50 @@ public class JDBCHelper {
             """;
 
     private static final String CREATE_TABLE_HISTORY = """
-    CREATE TABLE IF NOT EXISTS history (
-        ID INT AUTO_INCREMENT PRIMARY KEY,
-        phone_number VARCHAR(255),
-        history_No INT,
-        history_date DATE,
-        history_place VARCHAR(255),
-        history_doctor VARCHAR(255),
-        history_organ VARCHAR(255),
-        symptom BLOB,
-        conclusion BLOB,
-        suggestion BLOB,
-        is_deleted VARCHAR(255)
-    );
-    """;
+            CREATE TABLE IF NOT EXISTS history (
+                ID INT AUTO_INCREMENT PRIMARY KEY,
+                phone_number VARCHAR(255),
+                history_No INT,
+                history_date DATE,
+                history_place VARCHAR(255),
+                history_doctor VARCHAR(255),
+                history_organ VARCHAR(255),
+                symptom BLOB,
+                conclusion BLOB,
+                suggestion BLOB,
+                is_deleted VARCHAR(255)
+            );
+            """;
 
     private static final String CREATE_TABLE_REPORT = """
-    CREATE TABLE IF NOT EXISTS report (
-        ID INT AUTO_INCREMENT PRIMARY KEY,
-        phone_number VARCHAR(255),
-        report_No INT,
-        report_content BLOB,
-        report_picture BLOB,
-        report_type VARCHAR(255),
-        report_date DATE,
-        report_place VARCHAR(255),
-        is_deleted VARCHAR(255)
-    );
-    """;
+            CREATE TABLE IF NOT EXISTS report (
+                ID INT AUTO_INCREMENT PRIMARY KEY,
+                phone_number VARCHAR(255),
+                report_No INT,
+                report_content BLOB,
+                report_picture BLOB,
+                report_type VARCHAR(255),
+                report_date DATE,
+                report_place VARCHAR(255),
+                is_deleted VARCHAR(255)
+            );
+            """;
 
     private static final String CREATE_TABLE_ALERT = """
-    CREATE TABLE IF NOT EXISTS alert (
-        ID INT AUTO_INCREMENT PRIMARY KEY,
-        phone_number VARCHAR(255),
-        alert_No VARCHAR(255),
-        type_No INT,
-        type VARCHAR(255),
-        content BLOB,
-        title VARCHAR(255),
-        date DATE,
-        cycle VARCHAR(255),
-        is_medicine VARCHAR(255),
-        is_deleted VARCHAR(255)
-    );
-    """;
+            CREATE TABLE IF NOT EXISTS alert (
+                ID INT AUTO_INCREMENT PRIMARY KEY,
+                phone_number VARCHAR(255),
+                alert_No VARCHAR(255),
+                type_No INT,
+                type VARCHAR(255),
+                content BLOB,
+                title VARCHAR(255),
+                date DATE,
+                cycle VARCHAR(255),
+                is_medicine VARCHAR(255),
+                is_deleted VARCHAR(255)
+            );
+            """;
 
     public JDBCHelper() {
         try {

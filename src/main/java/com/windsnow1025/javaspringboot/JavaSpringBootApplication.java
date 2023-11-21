@@ -8,6 +8,7 @@ public class JavaSpringBootApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JavaSpringBootApplication.class, args);
+        JDBCHelper jdbcHelper = new JDBCHelper();
     }
 
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JDBCHelper {
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3307/" + System.getenv("MYSQL_DATABASE");
+    private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
     private static final int DATABASE_VERSION = 1;

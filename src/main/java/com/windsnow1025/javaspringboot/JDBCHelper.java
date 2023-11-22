@@ -81,13 +81,17 @@ public class JDBCHelper {
             );
             """;
 
+    private static final String INSERT_METADATA = """
+            INSERT INTO metadata (version) VALUES (0)
+            """;
+
     public JDBCHelper() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
             String currentVersion = getDatabaseVersionFromMetadata();
             if (currentVersion == null) {
-                onCreate(connection);
+                onCreate(connection); // Initialize database version to 0
                 setDatabaseVersionInMetadata();
             } else if (!currentVersion.equals(DATABASE_VERSION)) {
                 onUpgrade(connection);
@@ -105,10 +109,12 @@ public class JDBCHelper {
             statement.executeUpdate(CREATE_TABLE_HISTORY);
             statement.executeUpdate(CREATE_TABLE_REPORT);
             statement.executeUpdate(CREATE_TABLE_ALERT);
+            statement.executeUpdate(INSERT_METADATA);
         }
         logger.info("Database created");
     }
 
+    // Change this function for each new version
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_TABLE_METADATA);
@@ -117,22 +123,30 @@ public class JDBCHelper {
     }
 
     private String getDatabaseVersionFromMetadata() {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeQuery("SELECT * FROM metadata");
-            return statement.getResultSet().getString("version");
+        final String SELECT_METADATA = "SELECT version FROM metadata";
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SELECT_METADATA)) {
+            if (resultSet.next()) {
+                return resultSet.getString("version");
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             return null;
         }
     }
 
-    private void setDatabaseVersionInMetadata() throws SQLException{
-        final String UPDATE_METADATA = "INSERT INTO metadata (version) VALUES (?)";
+    private void setDatabaseVersionInMetadata() throws SQLException {
+        final String UPDATE_METADATA = """
+                UPDATE metadata SET version = ?
+                """;
         try (PreparedStatement updateStatement = connection.prepareStatement(UPDATE_METADATA)) {
             updateStatement.setString(1, DATABASE_VERSION);
+            updateStatement.executeUpdate();
         }
     }
 
-    public void closeConnection() throws SQLException{
+    public void closeConnection() throws SQLException {
         if (connection != null) {
             connection.close();
         }

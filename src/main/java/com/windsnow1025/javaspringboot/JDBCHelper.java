@@ -3,10 +3,7 @@ package com.windsnow1025.javaspringboot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class JDBCHelper {
     private static final Logger logger = LoggerFactory.getLogger(JDBCHelper.class);
@@ -129,8 +126,9 @@ public class JDBCHelper {
     }
 
     private void setDatabaseVersionInMetadata() throws SQLException{
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("INSERT INTO metadata (version) VALUES ('" + DATABASE_VERSION + "')");
+        final String UPDATE_METADATA = "INSERT INTO metadata (version) VALUES (?)";
+        try (PreparedStatement updateStatement = connection.prepareStatement(UPDATE_METADATA)) {
+            updateStatement.setString(1, DATABASE_VERSION);
         }
     }
 

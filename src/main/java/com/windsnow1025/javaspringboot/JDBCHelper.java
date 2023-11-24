@@ -12,7 +12,7 @@ public class JDBCHelper {
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
     private static final String DATABASE_VERSION = "1";
 
-    public Connection connection;
+    private Connection connection;
 
     private static final String CREATE_TABLE_METADATA = """
             CREATE TABLE IF NOT EXISTS metadata (
@@ -100,6 +100,10 @@ public class JDBCHelper {
         } catch (ClassNotFoundException | SQLException e) {
             logger.error("Database connection failed", e);
         }
+    }
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
     }
 
     public void onCreate(Connection connection) throws SQLException {

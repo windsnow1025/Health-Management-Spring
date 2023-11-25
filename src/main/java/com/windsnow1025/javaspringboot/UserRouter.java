@@ -3,10 +3,7 @@ package com.windsnow1025.javaspringboot;
 import com.windsnow1025.javaspringboot.db.JDBCHelper;
 import com.windsnow1025.javaspringboot.db.UserDAO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -36,5 +33,10 @@ public class UserRouter {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
         }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, Object>> test() {
+        return ResponseEntity.ok(Map.of("status", "Success", "message", "Test successful"));
     }
 }

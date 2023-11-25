@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot;
+package com.windsnow1025.javaspringboot.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

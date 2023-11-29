@@ -17,7 +17,7 @@ public class SyncController {
     private final ReportDAO reportDAO = new ReportDAO();
     private final AlertDAO alertDAO = new AlertDAO();
 
-    @PostMapping("/syncData")
+    @PostMapping("/")
     public ResponseEntity<?> syncData(@RequestBody SyncRequest request) {
         try {
             // Process and sync history
@@ -37,7 +37,7 @@ public class SyncController {
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

@@ -10,7 +10,8 @@ import java.sql.SQLException;
 public class UserDAO {
 
     private static final String LOGIN_QUERY = """
-            SELECT phone_number, username FROM user WHERE phone_number = ? AND password = ?
+            SELECT phone_number, username, sex, birthday FROM user 
+            WHERE phone_number = ? AND password = ?
             """;
 
     private static final String SIGNUP_QUERY = """
@@ -31,9 +32,13 @@ public class UserDAO {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return new User(resultSet.getString("phone_number"), resultSet.getString("username"));
+                String phone_number = resultSet.getString("phone_number");
+                String username = resultSet.getString("username");
+                String sex = resultSet.getString("sex");
+                String birthday = resultSet.getString("birthday");
+                return new User(phone_number, username, sex, birthday);
             }
-            return null; // User not found or password mismatch
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException("Login failed", e);
         }

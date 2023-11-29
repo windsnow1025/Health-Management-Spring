@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot;
+package com.windsnow1025.javaspringboot.api;
 
 import com.windsnow1025.javaspringboot.model.Alert;
 import com.windsnow1025.javaspringboot.model.History;

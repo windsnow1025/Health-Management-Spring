@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot;
+package com.windsnow1025.javaspringboot.api;
 
 import com.windsnow1025.javaspringboot.db.AlertDAO;
 import com.windsnow1025.javaspringboot.db.HistoryDAO;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sync")
-public class SyncRouter {
+public class SyncController {
 
     private final HistoryDAO historyDAO = new HistoryDAO();
     private final ReportDAO reportDAO = new ReportDAO();

@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot;
+package com.windsnow1025.javaspringboot.api;
 
 import com.windsnow1025.javaspringboot.db.JDBCHelper;
 import com.windsnow1025.javaspringboot.db.UserDAO;
@@ -11,11 +11,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-public class UserRouter {
+public class UserController {
 
     private final UserDAO userDAO;
 
-    public UserRouter() {
+    public UserController() {
         JDBCHelper jdbcHelper = new JDBCHelper();
         this.userDAO = new UserDAO(jdbcHelper);
     }

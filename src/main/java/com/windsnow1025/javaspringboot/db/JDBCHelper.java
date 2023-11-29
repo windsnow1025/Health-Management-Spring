@@ -29,55 +29,58 @@ public class JDBCHelper {
                 email VARCHAR(255),
                 birthday DATE,
                 sex VARCHAR(255),
-                is_login VARCHAR(255),
-                is_multipled VARCHAR(255),
                 is_deleted VARCHAR(255)
             );
             """;
 
-    private static final String CREATE_TABLE_HISTORY = """
-            CREATE TABLE IF NOT EXISTS history (
+    // 病例记录
+    // organ 是器官
+    private static final String CREATE_TABLE_RECORD = """
+            CREATE TABLE IF NOT EXISTS record (
                 ID INT AUTO_INCREMENT PRIMARY KEY,
                 phone_number VARCHAR(255),
-                history_No INT,
-                history_date DATE,
-                history_place VARCHAR(255),
-                history_doctor VARCHAR(255),
-                history_organ VARCHAR(255),
-                symptom BLOB,
-                conclusion BLOB,
-                suggestion BLOB,
-                is_deleted VARCHAR(255)
+                record_date DATE,
+                hospital VARCHAR(255),
+                doctor VARCHAR(255),
+                organ VARCHAR(255),
+                symptom TEXT,
+                conclusion TEXT,
+                suggestion TEXT,
+                is_deleted VARCHAR(255),
+                FOREIGN KEY phone_number REFERENCES user(phone_number)
             );
             """;
 
+    // 体检报告
+    // report_type 是全检 / 部分检查
     private static final String CREATE_TABLE_REPORT = """
             CREATE TABLE IF NOT EXISTS report (
                 ID INT AUTO_INCREMENT PRIMARY KEY,
                 phone_number VARCHAR(255),
-                report_No INT,
-                report_content BLOB,
-                report_picture BLOB,
-                report_type VARCHAR(255),
                 report_date DATE,
-                report_place VARCHAR(255),
-                is_deleted VARCHAR(255)
+                hospital VARCHAR(255),
+                report_type VARCHAR(255),
+                picture TEXT,
+                detail TEXT,
+                is_deleted VARCHAR(255),
+                FOREIGN KEY phone_number REFERENCES user(phone_number)
             );
             """;
 
+    // 吃药提醒/就诊提醒 取决于 is_medicine
+    // alert_type 在record里是organ，在report里是report_type
     private static final String CREATE_TABLE_ALERT = """
             CREATE TABLE IF NOT EXISTS alert (
                 ID INT AUTO_INCREMENT PRIMARY KEY,
                 phone_number VARCHAR(255),
-                alert_No VARCHAR(255),
-                type_No INT,
-                type VARCHAR(255),
-                content BLOB,
+                alert_type VARCHAR(255),
+                advice TEXT,
                 title VARCHAR(255),
-                date DATE,
-                cycle VARCHAR(255),
+                alert_date DATE,
+                alert_cycle VARCHAR(255),
                 is_medicine VARCHAR(255),
-                is_deleted VARCHAR(255)
+                is_deleted VARCHAR(255),
+                FOREIGN KEY phone_number REFERENCES user(phone_number)
             );
             """;
 
@@ -110,7 +113,7 @@ public class JDBCHelper {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_TABLE_METADATA);
             statement.executeUpdate(CREATE_TABLE_USER);
-            statement.executeUpdate(CREATE_TABLE_HISTORY);
+            statement.executeUpdate(CREATE_TABLE_RECORD);
             statement.executeUpdate(CREATE_TABLE_REPORT);
             statement.executeUpdate(CREATE_TABLE_ALERT);
             statement.executeUpdate(INSERT_METADATA);

@@ -55,4 +55,20 @@ public class UserController {
             return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
         }
     }
+
+    @PostMapping("/exist")
+    public ResponseEntity<Map<String, Object>> isExistUser(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+
+        try {
+            boolean isExist = userDAO.isExist(phoneNumber);
+            if (isExist) {
+                return ResponseEntity.ok(Map.of("status", "Success", "message", "User exist"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("status", "Failure", "message", "User not exist"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
+        }
+    }
 }

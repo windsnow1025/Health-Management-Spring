@@ -18,6 +18,11 @@ public class UserDAO {
             INSERT INTO user (phone_number, password, sex, birthday) VALUES (?, ?, ?, ?)
             """;
 
+    private static final String IS_EXIST_QUERY = """
+            SELECT phone_number FROM user 
+            WHERE phone_number = ?
+            """;
+
     private JDBCHelper jdbcHelper;
 
     public UserDAO(JDBCHelper jdbcHelper) {
@@ -56,6 +61,18 @@ public class UserDAO {
             return true;
         } catch (SQLException e) {
             throw new RuntimeException("Signup failed", e);
+        }
+    }
+
+    public boolean isExist(String phoneNumber) {
+        try (Connection connection = jdbcHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(IS_EXIST_QUERY)) {
+            statement.setString(1, phoneNumber);
+            ResultSet resultSet = statement.executeQuery();
+
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Check failed", e);
         }
     }
 }

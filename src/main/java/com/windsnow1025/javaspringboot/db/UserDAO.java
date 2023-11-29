@@ -1,5 +1,7 @@
 package com.windsnow1025.javaspringboot.db;
 
+import com.windsnow1025.javaspringboot.model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +10,11 @@ import java.sql.SQLException;
 public class UserDAO {
 
     private static final String LOGIN_QUERY = """
-            SELECT phone_number, username FROM user 
-            WHERE phone_number = ? AND password = ?
+            SELECT phone_number, username FROM user WHERE phone_number = ? AND password = ?
+            """;
+
+    private static final String SIGNUP_QUERY = """
+            INSERT INTO user (phone_number, password, sex, birthday) VALUES (?, ?, ?, ?)
             """;
 
     private JDBCHelper jdbcHelper;
@@ -18,7 +23,7 @@ public class UserDAO {
         this.jdbcHelper = jdbcHelper;
     }
 
-    public User login(String phoneNumber, String password) {
+    public User signin(String phoneNumber, String password) {
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement statement = connection.prepareStatement(LOGIN_QUERY)) {
             statement.setString(1, phoneNumber);
@@ -34,30 +39,18 @@ public class UserDAO {
         }
     }
 
-    public static class User {
-        private String phoneNumber;
-        private String username;
+    public boolean signup(String phoneNumber, String password, String sex, String birthday) {
+        try (Connection connection = jdbcHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SIGNUP_QUERY)) {
+            statement.setString(1, phoneNumber);
+            statement.setString(2, password);
+            statement.setString(3, sex);
+            statement.setString(4, birthday);
+            statement.executeUpdate();
 
-        public User(String phoneNumber, String username) {
-            this.phoneNumber = phoneNumber;
-            this.username = username;
-        }
-
-        // Getters and setters
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Signup failed", e);
         }
     }
 }

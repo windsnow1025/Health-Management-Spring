@@ -2,6 +2,7 @@ package com.windsnow1025.javaspringboot;
 
 import com.windsnow1025.javaspringboot.db.JDBCHelper;
 import com.windsnow1025.javaspringboot.db.UserDAO;
+import com.windsnow1025.javaspringboot.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +20,12 @@ public class UserRouter {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> loginRequest) {
-        String phoneNumber = loginRequest.get("phoneNumber");
-        String password = loginRequest.get("password");
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+        String password = request.get("password");
 
         try {
-            UserDAO.User user = userDAO.login(phoneNumber, password);
+            User user = userDAO.signin(phoneNumber, password);
             if (user != null) {
                 return ResponseEntity.ok(Map.of("status", "Success", "message", "Login successful"));
             } else {
@@ -35,8 +36,22 @@ public class UserRouter {
         }
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Map<String, Object>> test() {
-        return ResponseEntity.ok(Map.of("status", "Success", "message", "Test successful"));
+    @PostMapping("/signup")
+    public ResponseEntity<Map<String, Object>> signupUser(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+        String password = request.get("password");
+        String sex = request.get("sex");
+        String birthday = request.get("birthday");
+
+        try {
+            boolean isSignedUp = userDAO.signup(phoneNumber, password, sex, birthday);
+            if (isSignedUp) {
+                return ResponseEntity.ok(Map.of("status", "Success", "message", "Signup successful"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("status", "Failure", "message", "Signup failed"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
+        }
     }
 }

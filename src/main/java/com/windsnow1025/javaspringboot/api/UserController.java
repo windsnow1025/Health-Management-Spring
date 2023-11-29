@@ -71,4 +71,21 @@ public class UserController {
             return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
         }
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<Map<String, Object>> updatePassword(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+        String password = request.get("password");
+
+        try {
+            boolean isUpdated = userDAO.updatePassword(phoneNumber, password);
+            if (isUpdated) {
+                return ResponseEntity.ok(Map.of("status", "Success", "message", "Password updated"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("status", "Failure", "message", "Password not updated"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
+        }
+    }
 }

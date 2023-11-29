@@ -23,6 +23,10 @@ public class UserDAO {
             WHERE phone_number = ?
             """;
 
+    private static final String UPDATE_PASSWORD_QUERY = """
+            UPDATE user SET password = ? WHERE phone_number = ?
+            """;
+
     private JDBCHelper jdbcHelper;
 
     public UserDAO(JDBCHelper jdbcHelper) {
@@ -73,6 +77,19 @@ public class UserDAO {
             return resultSet.next();
         } catch (SQLException e) {
             throw new RuntimeException("Check failed", e);
+        }
+    }
+
+    public boolean updatePassword(String phoneNumber, String password) {
+        try (Connection connection = jdbcHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PASSWORD_QUERY)) {
+            statement.setString(1, password);
+            statement.setString(2, phoneNumber);
+            statement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Update failed", e);
         }
     }
 }

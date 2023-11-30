@@ -4,24 +4,20 @@ import java.sql.Blob;
 import java.sql.Date;
 
 public class Report {
-    String phone_number;
-    int report_No;
-    Blob report_content;
-    Blob report_picture;
-    String report_type;
-    Date report_date;
-    String report_place;
-    String is_deleted;
+    private String phone_number;
+    private Date report_date;
+    private String hospital;
+    private String report_type;
+    private Blob picture;
+    private String detail;
 
-    public Report(String phone_number, int report_No, Blob report_content, Blob report_picture, String report_type, Date report_date, String report_place, String is_deleted) {
+    public Report(String phone_number, Date report_date, String hospital, String report_type, Blob picture, String detail) {
         this.phone_number = phone_number;
-        this.report_No = report_No;
-        this.report_content = report_content;
-        this.report_picture = report_picture;
-        this.report_type = report_type;
         this.report_date = report_date;
-        this.report_place = report_place;
-        this.is_deleted = is_deleted;
+        this.hospital = hospital;
+        this.report_type = report_type;
+        this.picture = picture;
+        this.detail = detail;
     }
 
     public String getPhone_number() {
@@ -32,28 +28,20 @@ public class Report {
         this.phone_number = phone_number;
     }
 
-    public int getReport_No() {
-        return report_No;
+    public Date getReport_date() {
+        return report_date;
     }
 
-    public void setReport_No(int report_No) {
-        this.report_No = report_No;
+    public void setReport_date(Date report_date) {
+        this.report_date = report_date;
     }
 
-    public Blob getReport_content() {
-        return report_content;
+    public String getHospital() {
+        return hospital;
     }
 
-    public void setReport_content(Blob report_content) {
-        this.report_content = report_content;
-    }
-
-    public Blob getReport_picture() {
-        return report_picture;
-    }
-
-    public void setReport_picture(Blob report_picture) {
-        this.report_picture = report_picture;
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 
     public String getReport_type() {
@@ -64,27 +52,19 @@ public class Report {
         this.report_type = report_type;
     }
 
-    public Date getReport_date() {
-        return report_date;
+    public Blob getPicture() {
+        return picture;
     }
 
-    public void setReport_date(Date report_date) {
-        this.report_date = report_date;
+    public void setPicture(Blob picture) {
+        this.picture = picture;
     }
 
-    public String getReport_place() {
-        return report_place;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setReport_place(String report_place) {
-        this.report_place = report_place;
-    }
-
-    public String getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(String is_deleted) {
-        this.is_deleted = is_deleted;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

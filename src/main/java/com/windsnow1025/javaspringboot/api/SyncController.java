@@ -12,6 +12,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sync")
@@ -25,7 +26,6 @@ public class SyncController {
     @PostMapping("/getData")
     public ResponseEntity<?> getData(@RequestBody SyncRequest request) {
         String phone_number = request.getPhone_number();
-        System.out.println("123");
         try {
             List<Record> recordList = recordDAO.getData(phone_number);
             List<Report> reportList = reportDAO.getData(phone_number);
@@ -36,6 +36,7 @@ public class SyncController {
             // 使用Jackson库将对象转换为JSON字符串
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonData = objectMapper.writeValueAsString(returnData);
+
 
             return ResponseEntity.ok(jsonData);
         } catch (Exception e) {
@@ -55,7 +56,7 @@ public class SyncController {
             reportDAO.insertData(reportList,phone_number);
             alertDAO.insertData(alertList,phone_number);
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1";
+    private static final String DATABASE_VERSION = "1.1";
 
     private Connection connection;
 
@@ -47,7 +47,7 @@ public class JDBCHelper {
                 conclusion TEXT,
                 suggestion TEXT,
                 is_deleted VARCHAR(255),
-                FOREIGN KEY phone_number REFERENCES user(phone_number)
+                FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
 
@@ -63,7 +63,7 @@ public class JDBCHelper {
                 picture TEXT,
                 detail TEXT,
                 is_deleted VARCHAR(255),
-                FOREIGN KEY phone_number REFERENCES user(phone_number)
+                FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
 
@@ -80,7 +80,7 @@ public class JDBCHelper {
                 alert_cycle VARCHAR(255),
                 is_medicine VARCHAR(255),
                 is_deleted VARCHAR(255),
-                FOREIGN KEY phone_number REFERENCES user(phone_number)
+                FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
 
@@ -124,7 +124,14 @@ public class JDBCHelper {
     // Change this function for each new version
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(CREATE_TABLE_METADATA);
+            // Drop all tables
+            statement.executeUpdate("DROP TABLE IF EXISTS user");
+            statement.executeUpdate("DROP TABLE IF EXISTS history");
+            statement.executeUpdate("DROP TABLE IF EXISTS report");
+            statement.executeUpdate("DROP TABLE IF EXISTS alert");
+
+            // Recreate all tables
+            onCreate(connection);
         }
         logger.info("Database upgraded");
     }

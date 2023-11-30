@@ -23,8 +23,17 @@ public class UserDAO {
             WHERE phone_number = ?
             """;
 
+    private static final String SELECT_USER_QUERY = """
+            SELECT phone_number, username, sex, birthday FROM user
+            WHERE phone_number = ?
+            """;
+
     private static final String UPDATE_PASSWORD_QUERY = """
             UPDATE user SET password = ? WHERE phone_number = ?
+            """;
+
+    private static final String UPDATE_USERNAME_QUERY = """
+            UPDATE user SET username = ? WHERE phone_number = ?
             """;
 
     private JDBCHelper jdbcHelper;
@@ -80,6 +89,25 @@ public class UserDAO {
         }
     }
 
+    public User selectUser(String phoneNumber) {
+        try (Connection connection = jdbcHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_USER_QUERY)) {
+            statement.setString(1, phoneNumber);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String phone_number = resultSet.getString("phone_number");
+                String username = resultSet.getString("username");
+                String sex = resultSet.getString("sex");
+                String birthday = resultSet.getString("birthday");
+                return new User(phone_number, username, sex, birthday);
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Select failed", e);
+        }
+    }
+
     public boolean updatePassword(String phoneNumber, String password) {
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_PASSWORD_QUERY)) {
@@ -92,4 +120,18 @@ public class UserDAO {
             throw new RuntimeException("Update failed", e);
         }
     }
+
+    public boolean updateUsername(String phoneNumber, String username) {
+        try (Connection connection = jdbcHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USERNAME_QUERY)) {
+            statement.setString(1, username);
+            statement.setString(2, phoneNumber);
+            statement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Update failed", e);
+        }
+    }
+
 }

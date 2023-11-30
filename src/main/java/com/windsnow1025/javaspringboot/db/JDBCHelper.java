@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.2";
+    private static final String DATABASE_VERSION = "1.3";
 
     private Connection connection;
 
@@ -26,7 +26,6 @@ public class JDBCHelper {
                 phone_number VARCHAR(255) PRIMARY KEY,
                 username VARCHAR(255),
                 password VARCHAR(255),
-                email VARCHAR(255),
                 birthday DATE,
                 sex VARCHAR(255)
             );

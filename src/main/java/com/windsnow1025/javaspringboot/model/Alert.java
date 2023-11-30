@@ -4,28 +4,22 @@ import java.sql.Blob;
 import java.sql.Date;
 
 public class Alert {
-    String phone_number;
-    String alert_No;
-    int type_No;
-    String type;
-    Blob content;
-    String title;
-    Date date;
-    String cycle;
-    String is_medicine;
-    String is_deleted;
+    private String phone_number;
+    private String alert_type;
+    private String advice;
+    private String title;
+    private Date alert_date;
+    private String alert_cycle;
+    private String is_medicine;
 
-    public Alert(String phone_number, String alert_No, int type_No, String type, Blob content, String title, Date date, String cycle, String is_medicine, String is_deleted) {
+    public Alert(String phone_number, String alert_type, String advice, String title, Date alert_date, String alert_cycle, String is_medicine) {
         this.phone_number = phone_number;
-        this.alert_No = alert_No;
-        this.type_No = type_No;
-        this.type = type;
-        this.content = content;
+        this.alert_type = alert_type;
+        this.advice = advice;
         this.title = title;
-        this.date = date;
-        this.cycle = cycle;
+        this.alert_date = alert_date;
+        this.alert_cycle = alert_cycle;
         this.is_medicine = is_medicine;
-        this.is_deleted = is_deleted;
     }
 
     public String getPhone_number() {
@@ -36,36 +30,20 @@ public class Alert {
         this.phone_number = phone_number;
     }
 
-    public String getAlert_No() {
-        return alert_No;
+    public String getAlert_type() {
+        return alert_type;
     }
 
-    public void setAlert_No(String alert_No) {
-        this.alert_No = alert_No;
+    public void setAlert_type(String alert_type) {
+        this.alert_type = alert_type;
     }
 
-    public int getType_No() {
-        return type_No;
+    public String getAdvice() {
+        return advice;
     }
 
-    public void setType_No(int type_No) {
-        this.type_No = type_No;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Blob getContent() {
-        return content;
-    }
-
-    public void setContent(Blob content) {
-        this.content = content;
+    public void setAdvice(String advice) {
+        this.advice = advice;
     }
 
     public String getTitle() {
@@ -76,20 +54,20 @@ public class Alert {
         this.title = title;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getAlert_date() {
+        return alert_date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setAlert_date(Date alert_date) {
+        this.alert_date = alert_date;
     }
 
-    public String getCycle() {
-        return cycle;
+    public String getAlert_cycle() {
+        return alert_cycle;
     }
 
-    public void setCycle(String cycle) {
-        this.cycle = cycle;
+    public void setAlert_cycle(String alert_cycle) {
+        this.alert_cycle = alert_cycle;
     }
 
     public String getIs_medicine() {
@@ -98,13 +76,5 @@ public class Alert {
 
     public void setIs_medicine(String is_medicine) {
         this.is_medicine = is_medicine;
-    }
-
-    public String getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(String is_deleted) {
-        this.is_deleted = is_deleted;
     }
 }

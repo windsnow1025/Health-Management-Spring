@@ -1,41 +1,62 @@
 package com.windsnow1025.javaspringboot.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsnow1025.javaspringboot.db.AlertDAO;
-import com.windsnow1025.javaspringboot.db.HistoryDAO;
+import com.windsnow1025.javaspringboot.db.RecordDAO;
+import com.windsnow1025.javaspringboot.db.JDBCHelper;
 import com.windsnow1025.javaspringboot.db.ReportDAO;
 import com.windsnow1025.javaspringboot.model.Alert;
-import com.windsnow1025.javaspringboot.model.History;
+import com.windsnow1025.javaspringboot.model.Record;
 import com.windsnow1025.javaspringboot.model.Report;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sync")
 public class SyncController {
 
-    private final HistoryDAO historyDAO = new HistoryDAO();
-    private final ReportDAO reportDAO = new ReportDAO();
-    private final AlertDAO alertDAO = new AlertDAO();
+    private final JDBCHelper jdbcHelper = new JDBCHelper();
+    private final RecordDAO recordDAO = new RecordDAO(jdbcHelper);
+    private final ReportDAO reportDAO = new ReportDAO(jdbcHelper);
+    private final AlertDAO alertDAO = new AlertDAO(jdbcHelper);
 
-    @PostMapping("/")
-    public ResponseEntity<?> syncData(@RequestBody SyncRequest request) {
+    @PostMapping("/getData")
+    public ResponseEntity<?> getData(@RequestBody SyncRequest request) {
+        String phone_number = request.getPhone_number();
         try {
-            // Process and sync history
-            for (History history : request.getHistories()) {
-                historyDAO.syncHistory(history);
-            }
+            List<Record> recordList = recordDAO.getData(phone_number);
+            List<Report> reportList = reportDAO.getData(phone_number);
+            List<Alert> alertList = alertDAO.getData(phone_number);
 
-            // Process and sync report
-            for (Report report : request.getReports()) {
-                reportDAO.syncReport(report);
-            }
+            ReturnData returnData = new ReturnData(recordList,reportList,alertList,phone_number);
 
-            // Process and sync alert
-            for (Alert alert : request.getAlerts()) {
-                alertDAO.syncAlert(alert);
-            }
+            // 使用Jackson库将对象转换为JSON字符串
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonData = objectMapper.writeValueAsString(returnData);
 
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok(jsonData);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/updateData")
+    public ResponseEntity<?> syncData(@RequestBody SyncRequest request){
+        List<Record> recordList = request.getRecords();
+        List<Report> reportList = request.getReports();
+        List<Alert> alertList = request.getAlerts();
+        String phone_number = request.getPhone_number();
+        try {
+
+            recordDAO.insertData(recordList,phone_number);
+            reportDAO.insertData(reportList,phone_number);
+            alertDAO.insertData(alertList,phone_number);
+
+            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

@@ -20,6 +20,20 @@ public class UserController {
         this.userDAO = new UserDAO(jdbcHelper);
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<User> getUser(@RequestParam String phoneNumber) {
+        try {
+            User user = userDAO.selectUser(phoneNumber);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<User> loginUser(@RequestBody Map<String, String> request) {
         String phoneNumber = request.get("phoneNumber");
@@ -72,7 +86,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update")
+    // Not safe, need verification code or original password
+    @PutMapping("/password")
     public ResponseEntity<Map<String, Object>> updatePassword(@RequestBody Map<String, String> request) {
         String phoneNumber = request.get("phoneNumber");
         String password = request.get("password");
@@ -88,4 +103,22 @@ public class UserController {
             return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
         }
     }
+
+    @PutMapping("/username")
+    public ResponseEntity<Map<String, Object>> updateUsername(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+        String username = request.get("username");
+
+        try {
+            boolean isUpdated = userDAO.updateUsername(phoneNumber, username);
+            if (isUpdated) {
+                return ResponseEntity.ok(Map.of("status", "Success", "message", "Username updated"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("status", "Failure", "message", "Username not updated"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
+        }
+    }
+
 }

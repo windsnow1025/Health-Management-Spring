@@ -121,6 +121,7 @@ public class JDBCHelper {
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             // Drop all tables
+            statement.executeUpdate("DROP TABLE IF EXISTS metadata");
             statement.executeUpdate("DROP TABLE IF EXISTS history");
             statement.executeUpdate("DROP TABLE IF EXISTS record");
             statement.executeUpdate("DROP TABLE IF EXISTS report");

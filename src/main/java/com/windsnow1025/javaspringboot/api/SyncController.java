@@ -23,15 +23,15 @@ public class SyncController {
     private final ReportDAO reportDAO = new ReportDAO(jdbcHelper);
     private final AlertDAO alertDAO = new AlertDAO(jdbcHelper);
 
-    @PostMapping("/getData")
+    @PostMapping("/get")
     public ResponseEntity<?> getData(@RequestBody SyncRequest request) {
-        String phone_number = request.getPhone_number();
+        String phoneNumber = request.getPhone_number();
         try {
-            List<Record> recordList = recordDAO.getData(phone_number);
-            List<Report> reportList = reportDAO.getData(phone_number);
-            List<Alert> alertList = alertDAO.getData(phone_number);
+            List<Record> recordList = recordDAO.getData(phoneNumber);
+            List<Report> reportList = reportDAO.getData(phoneNumber);
+            List<Alert> alertList = alertDAO.getData(phoneNumber);
 
-            ReturnData returnData = new ReturnData(recordList,reportList,alertList,phone_number);
+            ReturnData returnData = new ReturnData(recordList, reportList, alertList);
 
             // 使用Jackson库将对象转换为JSON字符串
             ObjectMapper objectMapper = new ObjectMapper();
@@ -44,17 +44,17 @@ public class SyncController {
         }
     }
 
-    @PostMapping("/updateData")
-    public ResponseEntity<?> syncData(@RequestBody SyncRequest request){
+    @PutMapping("/update")
+    public ResponseEntity<?> syncData(@RequestBody SyncRequest request) {
         List<Record> recordList = request.getRecords();
         List<Report> reportList = request.getReports();
         List<Alert> alertList = request.getAlerts();
-        String phone_number = request.getPhone_number();
+        String phoneNumber = request.getPhone_number();
         try {
 
-            recordDAO.insertData(recordList,phone_number);
-            reportDAO.insertData(reportList,phone_number);
-            alertDAO.insertData(alertList,phone_number);
+            recordDAO.insertData(recordList, phoneNumber);
+            reportDAO.insertData(reportList, phoneNumber);
+            alertDAO.insertData(alertList, phoneNumber);
 
             return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
         } catch (Exception e) {

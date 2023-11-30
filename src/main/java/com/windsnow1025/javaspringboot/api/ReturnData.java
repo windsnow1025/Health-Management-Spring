@@ -10,13 +10,11 @@ public class ReturnData {
     private List<Record> recordList;
     private List<Report> reportList;
     private List<Alert> alerts;
-    private String phone_number;
 
-    public ReturnData(List<Record> recordList, List<Report> reportList, List<Alert> alerts, String phone_number) {
+    public ReturnData(List<Record> recordList, List<Report> reportList, List<Alert> alerts) {
         this.recordList = recordList;
         this.reportList = reportList;
         this.alerts = alerts;
-        this.phone_number = phone_number;
     }
 
     public List<Record> getRecordList() {
@@ -43,11 +41,4 @@ public class ReturnData {
         this.alerts = alerts;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
 }

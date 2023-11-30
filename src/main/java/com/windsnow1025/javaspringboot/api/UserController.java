@@ -121,4 +121,21 @@ public class UserController {
         }
     }
 
+    @PutMapping("/birthday")
+    public ResponseEntity<Map<String, Object>> updateBirthday(@RequestBody Map<String, String> request) {
+        String phoneNumber = request.get("phoneNumber");
+        String birthday = request.get("birthday");
+
+        try {
+            boolean isUpdated = userDAO.updateBirthday(phoneNumber, birthday);
+            if (isUpdated) {
+                return ResponseEntity.ok(Map.of("status", "Success", "message", "Birthday updated"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("status", "Failure", "message", "Birthday not updated"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));
+        }
+    }
+
 }

@@ -36,6 +36,10 @@ public class UserDAO {
             UPDATE user SET username = ? WHERE phone_number = ?
             """;
 
+    private static final String UPDATE_BIRTHDAY_QUERY = """
+            UPDATE user SET birthday = ? WHERE phone_number = ?
+            """;
+
     private JDBCHelper jdbcHelper;
 
     public UserDAO(JDBCHelper jdbcHelper) {
@@ -125,6 +129,19 @@ public class UserDAO {
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USERNAME_QUERY)) {
             statement.setString(1, username);
+            statement.setString(2, phoneNumber);
+            statement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Update failed", e);
+        }
+    }
+
+    public boolean updateBirthday(String phoneNumber, String birthday) {
+        try (Connection connection = jdbcHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_BIRTHDAY_QUERY)) {
+            statement.setString(1, birthday);
             statement.setString(2, phoneNumber);
             statement.executeUpdate();
 

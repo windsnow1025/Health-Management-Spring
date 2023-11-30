@@ -31,14 +31,9 @@ public class SyncController {
             List<Report> reportList = reportDAO.getData(phoneNumber);
             List<Alert> alertList = alertDAO.getData(phoneNumber);
 
-            ReturnData returnData = new ReturnData(recordList, reportList, alertList);
+            SyncReturn syncReturn = new SyncReturn(recordList, reportList, alertList);
 
-            // 使用Jackson库将对象转换为JSON字符串
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(returnData);
-
-
-            return ResponseEntity.ok(jsonData);
+            return ResponseEntity.ok(syncReturn);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

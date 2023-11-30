@@ -6,12 +6,12 @@ import com.windsnow1025.javaspringboot.model.Report;
 
 import java.util.List;
 
-public class ReturnData {
+public class SyncReturn {
     private List<Record> recordList;
     private List<Report> reportList;
     private List<Alert> alerts;
 
-    public ReturnData(List<Record> recordList, List<Report> reportList, List<Alert> alerts) {
+    public SyncReturn(List<Record> recordList, List<Report> reportList, List<Alert> alerts) {
         this.recordList = recordList;
         this.reportList = reportList;
         this.alerts = alerts;

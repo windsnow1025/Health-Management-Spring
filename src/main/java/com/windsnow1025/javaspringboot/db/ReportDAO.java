@@ -46,7 +46,6 @@ public class ReportDAO {
                 return null;
             }
 
-            delete(phone_number);
             return reportList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -69,6 +68,9 @@ public class ReportDAO {
             if (reportList == null){
                 return false;
             }
+
+            delete(phone_number);
+
             for (Report report:reportList){
                 preparedStatement.setString(1,report.getPhone_number());
                 preparedStatement.setDate(2,report.getReport_date());

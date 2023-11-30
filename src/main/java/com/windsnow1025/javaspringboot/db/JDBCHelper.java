@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.1";
+    private static final String DATABASE_VERSION = "1.2";
 
     private Connection connection;
 
@@ -28,8 +28,7 @@ public class JDBCHelper {
                 password VARCHAR(255),
                 email VARCHAR(255),
                 birthday DATE,
-                sex VARCHAR(255),
-                is_deleted VARCHAR(255)
+                sex VARCHAR(255)
             );
             """;
 
@@ -46,7 +45,6 @@ public class JDBCHelper {
                 symptom TEXT,
                 conclusion TEXT,
                 suggestion TEXT,
-                is_deleted VARCHAR(255),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
@@ -62,7 +60,6 @@ public class JDBCHelper {
                 report_type VARCHAR(255),
                 picture TEXT,
                 detail TEXT,
-                is_deleted VARCHAR(255),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
@@ -79,7 +76,6 @@ public class JDBCHelper {
                 alert_date DATE,
                 alert_cycle VARCHAR(255),
                 is_medicine VARCHAR(255),
-                is_deleted VARCHAR(255),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
@@ -127,6 +123,7 @@ public class JDBCHelper {
             // Drop all tables
             statement.executeUpdate("DROP TABLE IF EXISTS user");
             statement.executeUpdate("DROP TABLE IF EXISTS history");
+            statement.executeUpdate("DROP TABLE IF EXISTS record");
             statement.executeUpdate("DROP TABLE IF EXISTS report");
             statement.executeUpdate("DROP TABLE IF EXISTS alert");
 

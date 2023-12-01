@@ -1,7 +1,5 @@
 package com.windsnow1025.javaspringboot.model;
 
-import java.sql.Blob;
-import java.sql.Date;
 
 public class Alert {
     private int ID;
@@ -9,11 +7,11 @@ public class Alert {
     private String alert_type;
     private String advice;
     private String title;
-    private Date alert_date;
+    private String alert_date;
     private String alert_cycle;
     private String is_medicine;
 
-    public Alert(int alert_id,String phone_number, String alert_type, String advice, String title, Date alert_date, String alert_cycle, String is_medicine) {
+    public Alert(int alert_id,String phone_number, String alert_type, String advice, String title, String alert_date, String alert_cycle, String is_medicine) {
         this.ID = alert_id;
         this.phone_number = phone_number;
         this.alert_type = alert_type;
@@ -64,11 +62,11 @@ public class Alert {
         this.title = title;
     }
 
-    public Date getAlert_date() {
+    public String getAlert_date() {
         return alert_date;
     }
 
-    public void setAlert_date(Date alert_date) {
+    public void setAlert_date(String alert_date) {
         this.alert_date = alert_date;
     }
 

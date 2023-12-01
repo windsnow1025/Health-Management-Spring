@@ -1,8 +1,5 @@
 package com.windsnow1025.javaspringboot.api;
 
-import com.windsnow1025.javaspringboot.model.Alert;
-import com.windsnow1025.javaspringboot.model.Record;
-import com.windsnow1025.javaspringboot.model.Report;
 
 import java.util.List;
 

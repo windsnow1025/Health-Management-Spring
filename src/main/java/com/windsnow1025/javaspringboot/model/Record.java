@@ -1,12 +1,11 @@
 package com.windsnow1025.javaspringboot.model;
 
 
-import java.sql.Date;
 
 public class Record {
     private int ID;
     private String phone_number;
-    private Date record_date;
+    private String record_date;
     private String hospital;
     private String doctor;
     private String organ;
@@ -14,7 +13,7 @@ public class Record {
     private String conclusion;
     private String suggestion;
 
-    public Record(int record_id,String phone_number, Date record_date, String hospital, String doctor, String organ, String symptom, String conclusion, String suggestion) {
+    public Record(int record_id,String phone_number, String record_date, String hospital, String doctor, String organ, String symptom, String conclusion, String suggestion) {
         this.ID = record_id;
         this.phone_number = phone_number;
         this.record_date = record_date;
@@ -42,11 +41,11 @@ public class Record {
         this.phone_number = phone_number;
     }
 
-    public Date getRecord_date() {
+    public String getRecord_date() {
         return record_date;
     }
 
-    public void setRecord_date(Date record_date) {
+    public void setRecord_date(String record_date) {
         this.record_date = record_date;
     }
 

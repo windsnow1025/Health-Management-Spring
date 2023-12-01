@@ -4,7 +4,6 @@ import com.windsnow1025.javaspringboot.model.Report;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 
 public class ReportDAO {
@@ -35,7 +34,7 @@ public class ReportDAO {
 
             while (resultSet.next()){
                 int report_id = resultSet.getInt("ID");
-                Date report_date = resultSet.getDate("report_date");
+                String report_date = resultSet.getString("report_date");
                 String hospital = resultSet.getString("hospital");
                 String report_type = resultSet.getString("report_type");
                 String picture = resultSet.getString("picture");
@@ -74,7 +73,7 @@ public class ReportDAO {
 
             for (Report report:reportList){
                 preparedStatement.setString(1,report.getPhone_number());
-                preparedStatement.setDate(2,report.getReport_date());
+                preparedStatement.setString(2,report.getReport_date());
                 preparedStatement.setString(3,report.getHospital());
                 preparedStatement.setString(4,report.getReport_type());
                 preparedStatement.setString(5,report.getPicture());

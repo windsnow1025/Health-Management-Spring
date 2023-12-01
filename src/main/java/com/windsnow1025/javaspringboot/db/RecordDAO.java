@@ -35,7 +35,7 @@ public class RecordDAO {
 
             while (resultSet.next()) {
                 int record_id = resultSet.getInt("ID");
-                Date record_date = resultSet.getDate("record_date");
+                String record_date = resultSet.getString("record_date");
                 String hospital = resultSet.getString("hospital");
                 String doctor = resultSet.getString("doctor");
                 String organ = resultSet.getString("organ");
@@ -77,7 +77,7 @@ public class RecordDAO {
 
             for (Record record : recordList) {
                 preparedStatement.setString(1, record.getPhone_number());
-                preparedStatement.setDate(2, record.getRecord_date());
+                preparedStatement.setString(2, record.getRecord_date());
                 preparedStatement.setString(3, record.getHospital());
                 preparedStatement.setString(4, record.getDoctor());
                 preparedStatement.setString(5, record.getOrgan());

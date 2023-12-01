@@ -39,7 +39,7 @@ public class AlertDAO {
                 String alert_type = resultSet.getString("alert_type");
                 String advice = resultSet.getString("advice");
                 String title = resultSet.getString("title");
-                Date alert_date = resultSet.getDate("alert_date");
+                String alert_date = resultSet.getString("alert_date");
                 String alert_cycle = resultSet.getString("alert_cycle");
                 String is_medicine = resultSet.getString("is_medicine");
                 alertList.add(new Alert(alert_id,phone_number, alert_type, advice, title, alert_date, alert_cycle, is_medicine));
@@ -78,7 +78,7 @@ public class AlertDAO {
                 preparedStatement.setString(2, alert.getAlert_type());
                 preparedStatement.setString(3, alert.getAdvice());
                 preparedStatement.setString(4, alert.getTitle());
-                preparedStatement.setDate(5, alert.getAlert_date());
+                preparedStatement.setString(5, alert.getAlert_date());
                 preparedStatement.setString(6, alert.getAlert_cycle());
                 preparedStatement.setString(7, alert.getIs_medicine());
                 preparedStatement.execute();

@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.4";
+    private static final String DATABASE_VERSION = "1.5";
 
     private Connection connection;
 
@@ -26,7 +26,7 @@ public class JDBCHelper {
                 phone_number VARCHAR(255) PRIMARY KEY,
                 username VARCHAR(255),
                 password VARCHAR(255),
-                birthday DATE,
+                birthday VARCHAR(255),
                 sex VARCHAR(255)
             );
             """;
@@ -37,7 +37,7 @@ public class JDBCHelper {
             CREATE TABLE IF NOT EXISTS record (
                 ID INT AUTO_INCREMENT PRIMARY KEY,
                 phone_number VARCHAR(255),
-                record_date DATE,
+                record_date VARCHAR(255),
                 hospital VARCHAR(255),
                 doctor VARCHAR(255),
                 organ VARCHAR(255),
@@ -54,7 +54,7 @@ public class JDBCHelper {
             CREATE TABLE IF NOT EXISTS report (
                 ID INT AUTO_INCREMENT PRIMARY KEY,
                 phone_number VARCHAR(255),
-                report_date DATE,
+                report_date VARCHAR(255),
                 hospital VARCHAR(255),
                 report_type VARCHAR(255),
                 picture BLOB,
@@ -72,7 +72,7 @@ public class JDBCHelper {
                 alert_type VARCHAR(255),
                 advice TEXT,
                 title VARCHAR(255),
-                alert_date DATE,
+                alert_date VARCHAR(255),
                 alert_cycle VARCHAR(255),
                 is_medicine VARCHAR(255),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)

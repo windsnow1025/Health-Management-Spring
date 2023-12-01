@@ -1,17 +1,16 @@
 package com.windsnow1025.javaspringboot.model;
 
-import java.sql.Date;
 
 public class Report {
     private int ID;
     private String phone_number;
-    private Date report_date;
+    private String report_date;
     private String hospital;
     private String report_type;
     private String picture;
     private String detail;
 
-    public Report(int report_id, String phone_number, Date report_date, String hospital, String report_type, String picture, String detail) {
+    public Report(int report_id, String phone_number, String report_date, String hospital, String report_type, String picture, String detail) {
         this.ID = report_id;
         this.phone_number = phone_number;
         this.report_date = report_date;
@@ -37,11 +36,11 @@ public class Report {
         this.phone_number = phone_number;
     }
 
-    public Date getReport_date() {
+    public String getReport_date() {
         return report_date;
     }
 
-    public void setReport_date(Date report_date) {
+    public void setReport_date(String report_date) {
         this.report_date = report_date;
     }
 

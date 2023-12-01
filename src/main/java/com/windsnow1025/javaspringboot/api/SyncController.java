@@ -1,6 +1,5 @@
 package com.windsnow1025.javaspringboot.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsnow1025.javaspringboot.db.AlertDAO;
 import com.windsnow1025.javaspringboot.db.RecordDAO;
 import com.windsnow1025.javaspringboot.db.JDBCHelper;

@@ -4,6 +4,7 @@ package com.windsnow1025.javaspringboot.model;
 import java.sql.Date;
 
 public class Record {
+    private int ID;
     private String phone_number;
     private Date record_date;
     private String hospital;
@@ -13,7 +14,8 @@ public class Record {
     private String conclusion;
     private String suggestion;
 
-    public Record(String phone_number, Date record_date, String hospital, String doctor, String organ, String symptom, String conclusion, String suggestion) {
+    public Record(int record_id,String phone_number, Date record_date, String hospital, String doctor, String organ, String symptom, String conclusion, String suggestion) {
+        this.ID = record_id;
         this.phone_number = phone_number;
         this.record_date = record_date;
         this.hospital = hospital;
@@ -22,6 +24,14 @@ public class Record {
         this.symptom = symptom;
         this.conclusion = conclusion;
         this.suggestion = suggestion;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getPhone_number() {

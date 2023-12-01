@@ -68,16 +68,38 @@ public class SyncController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> syncData(@RequestBody SyncRequest request) {
-        List<Record> recordList = request.getRecords();
-        List<Report> reportList = request.getReports();
-        List<Alert> alertList = request.getAlerts();
+    @PutMapping("/update/record")
+    public ResponseEntity<?> syncRecordData(@RequestBody SyncRequest<Record> request) {
+        List<Record> recordList = request.getData();
+
         String phoneNumber = request.getPhone_number();
         try {
-
             recordDAO.insertData(recordList, phoneNumber);
+
+            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PutMapping("/update/report")
+    public ResponseEntity<?> syncReportData(@RequestBody SyncRequest<Report> request) {
+        List<Report> reportList = request.getData();
+
+        String phoneNumber = request.getPhone_number();
+        try {
             reportDAO.insertData(reportList, phoneNumber);
+
+            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PutMapping("/update/alert")
+    public ResponseEntity<?> syncData(@RequestBody SyncRequest<Alert> request) {
+        List<Alert> alertList = request.getData();
+
+        String phoneNumber = request.getPhone_number();
+        try {
             alertDAO.insertData(alertList, phoneNumber);
 
             return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));

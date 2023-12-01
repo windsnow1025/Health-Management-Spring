@@ -34,12 +34,13 @@ public class ReportDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()){
+                int report_id = resultSet.getInt("ID");
                 Date report_date = resultSet.getDate("report_date");
                 String hospital = resultSet.getString("hospital");
                 String report_type = resultSet.getString("report_type");
                 Blob picture = resultSet.getBlob("picture");
                 String detail = resultSet.getString("detail");
-                reportList.add(new Report(phone_number, report_date, hospital, report_type, picture, detail));
+                reportList.add(new Report(report_id,phone_number, report_date, hospital, report_type, picture, detail));
             }
 
             if (reportList.isEmpty()) {

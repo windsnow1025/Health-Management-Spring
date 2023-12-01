@@ -35,6 +35,7 @@ public class RecordDAO {
 
             while (resultSet.next()) {
                 System.out.println("Finding Record List");
+                int record_id = resultSet.getInt("ID");
                 Date record_date = resultSet.getDate("record_date");
                 String hospital = resultSet.getString("hospital");
                 String doctor = resultSet.getString("doctor");
@@ -42,7 +43,7 @@ public class RecordDAO {
                 String symptom = resultSet.getString("symptom");
                 String conclusion = resultSet.getString("conclusion");
                 String suggestion = resultSet.getString("suggestion");
-                recordList.add(new Record(phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion));
+                recordList.add(new Record(record_id,phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion));
             }
 
             if (recordList.isEmpty()) {

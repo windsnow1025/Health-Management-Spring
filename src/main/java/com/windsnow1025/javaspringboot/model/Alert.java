@@ -4,6 +4,7 @@ import java.sql.Blob;
 import java.sql.Date;
 
 public class Alert {
+    private int ID;
     private String phone_number;
     private String alert_type;
     private String advice;
@@ -12,7 +13,8 @@ public class Alert {
     private String alert_cycle;
     private String is_medicine;
 
-    public Alert(String phone_number, String alert_type, String advice, String title, Date alert_date, String alert_cycle, String is_medicine) {
+    public Alert(int alert_id,String phone_number, String alert_type, String advice, String title, Date alert_date, String alert_cycle, String is_medicine) {
+        this.ID = alert_id;
         this.phone_number = phone_number;
         this.alert_type = alert_type;
         this.advice = advice;
@@ -20,6 +22,14 @@ public class Alert {
         this.alert_date = alert_date;
         this.alert_cycle = alert_cycle;
         this.is_medicine = is_medicine;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getPhone_number() {

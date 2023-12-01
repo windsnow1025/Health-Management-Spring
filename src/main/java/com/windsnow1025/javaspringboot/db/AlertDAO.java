@@ -35,13 +35,14 @@ public class AlertDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
+                int alert_id = resultSet.getInt("ID");
                 String alert_type = resultSet.getString("alert_type");
                 String advice = resultSet.getString("advice");
                 String title = resultSet.getString("title");
                 Date alert_date = resultSet.getDate("alert_date");
                 String alert_cycle = resultSet.getString("alert_cycle");
                 String is_medicine = resultSet.getString("is_medicine");
-                alertList.add(new Alert(phone_number, alert_type, advice, title, alert_date, alert_cycle, is_medicine));
+                alertList.add(new Alert(alert_id,phone_number, alert_type, advice, title, alert_date, alert_cycle, is_medicine));
             }
             if (alertList.isEmpty()) {
                 return null;

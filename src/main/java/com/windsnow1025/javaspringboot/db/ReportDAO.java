@@ -38,7 +38,7 @@ public class ReportDAO {
                 Date report_date = resultSet.getDate("report_date");
                 String hospital = resultSet.getString("hospital");
                 String report_type = resultSet.getString("report_type");
-                Blob picture = resultSet.getBlob("picture");
+                String picture = resultSet.getString("picture");
                 String detail = resultSet.getString("detail");
                 reportList.add(new Report(report_id,phone_number, report_date, hospital, report_type, picture, detail));
             }
@@ -77,7 +77,7 @@ public class ReportDAO {
                 preparedStatement.setDate(2,report.getReport_date());
                 preparedStatement.setString(3,report.getHospital());
                 preparedStatement.setString(4,report.getReport_type());
-                preparedStatement.setBlob(5,report.getPicture());
+                preparedStatement.setString(5,report.getPicture());
                 preparedStatement.setString(6,report.getDetail());
                 preparedStatement.execute();
             }

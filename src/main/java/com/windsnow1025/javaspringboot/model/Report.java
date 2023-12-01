@@ -1,6 +1,5 @@
 package com.windsnow1025.javaspringboot.model;
 
-import java.sql.Blob;
 import java.sql.Date;
 
 public class Report {
@@ -9,10 +8,10 @@ public class Report {
     private Date report_date;
     private String hospital;
     private String report_type;
-    private Blob picture;
+    private String picture;
     private String detail;
 
-    public Report(int report_id,String phone_number, Date report_date, String hospital, String report_type, Blob picture, String detail) {
+    public Report(int report_id, String phone_number, Date report_date, String hospital, String report_type, String picture, String detail) {
         this.ID = report_id;
         this.phone_number = phone_number;
         this.report_date = report_date;
@@ -62,11 +61,11 @@ public class Report {
         this.report_type = report_type;
     }
 
-    public Blob getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Blob picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

@@ -34,7 +34,6 @@ public class RecordDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                System.out.println("Finding Record List");
                 int record_id = resultSet.getInt("ID");
                 Date record_date = resultSet.getDate("record_date");
                 String hospital = resultSet.getString("hospital");
@@ -47,7 +46,6 @@ public class RecordDAO {
             }
 
             if (recordList.isEmpty()) {
-                System.out.println("Record List Not Found");
                 return null;
             }
 

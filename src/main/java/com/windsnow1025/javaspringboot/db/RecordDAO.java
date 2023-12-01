@@ -8,8 +8,7 @@ import java.util.List;
 
 public class RecordDAO {
     private static final String SELECT_RECORD = """
-            SELECT *
-            FROM record
+            SELECT * FROM record
             WHERE phone_number = ?
             """;
     private static final String DELETE_RECORD = """
@@ -22,8 +21,8 @@ public class RecordDAO {
             """;
     private JDBCHelper jdbcHelper;
 
-    public RecordDAO(JDBCHelper jdbcHelper) {
-        this.jdbcHelper = jdbcHelper;
+    public RecordDAO() {
+        this.jdbcHelper = new JDBCHelper();
     }
 
     public List<Record> getData(String phone_number) {
@@ -94,7 +93,4 @@ public class RecordDAO {
         }
     }
 
-    public boolean syncHistory(Record history) {
-        return true;
-    }
 }

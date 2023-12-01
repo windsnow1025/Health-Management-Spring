@@ -21,8 +21,8 @@ public class ReportDAO {
             DELETE FROM report WHERE phone_number = ?
             """;
     private JDBCHelper jdbcHelper;
-    public ReportDAO(JDBCHelper jdbcHelper){
-        this.jdbcHelper = jdbcHelper;
+    public ReportDAO(){
+        this.jdbcHelper = new JDBCHelper();
     }
 
     public List<Report> getData(String phone_number){
@@ -86,7 +86,4 @@ public class ReportDAO {
         }
     }
 
-    public boolean syncReport(Report report) {
-        return true;
-    }
 }

@@ -91,8 +91,4 @@ public class RecordDAO {
             throw new RuntimeException(e);
         }
     }
-
-    public boolean syncHistory(Record history) {
-        return true;
-    }
 }

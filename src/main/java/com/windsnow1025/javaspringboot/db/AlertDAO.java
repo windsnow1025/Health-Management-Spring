@@ -88,7 +88,4 @@ public class AlertDAO {
         }
     }
 
-    public boolean syncAlert(Alert alert) {
-        return true;
-    }
 }

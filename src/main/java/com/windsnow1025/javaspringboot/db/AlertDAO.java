@@ -22,60 +22,64 @@ public class AlertDAO {
             """;
 
     private JDBCHelper jdbcHelper;
-    public AlertDAO(JDBCHelper jdbcHelper){
+
+    public AlertDAO(JDBCHelper jdbcHelper) {
         this.jdbcHelper = jdbcHelper;
     }
-    public List<Alert> getData(String phone_number){
+
+    public List<Alert> getData(String phone_number) {
         try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALERT)){
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALERT)) {
             List<Alert> alertList = new ArrayList<>();
-            preparedStatement.setString(1,phone_number);
+            preparedStatement.setString(1, phone_number);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 String alert_type = resultSet.getString("alert_type");
                 String advice = resultSet.getString("advice");
                 String title = resultSet.getString("title");
                 Date alert_date = resultSet.getDate("alert_date");
                 String alert_cycle = resultSet.getString("alert_cycle");
                 String is_medicine = resultSet.getString("is_medicine");
-                alertList.add(new Alert(phone_number,alert_type,advice,title,alert_date,alert_cycle,is_medicine));
+                alertList.add(new Alert(phone_number, alert_type, advice, title, alert_date, alert_cycle, is_medicine));
             }
-            if (alertList.isEmpty()){
+            if (alertList.isEmpty()) {
                 return null;
             }
 
-            delete(phone_number);
             return alertList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void delete(String phone_number){
+    private void delete(String phone_number) {
         try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALERT)){
-            preparedStatement.setString(1,phone_number);
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALERT)) {
+            preparedStatement.setString(1, phone_number);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean insertData(List<Alert> alertList,String phone_number){
+    public boolean insertData(List<Alert> alertList, String phone_number) {
         try (Connection connection = jdbcHelper.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ALERT)){
-            if (alertList == null){
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ALERT)) {
+            if (alertList == null) {
                 return false;
             }
-            for (Alert alert:alertList){
-                preparedStatement.setString(1,alert.getPhone_number());
+
+            delete(phone_number);
+
+            for (Alert alert : alertList) {
+                preparedStatement.setString(1, alert.getPhone_number());
                 preparedStatement.setString(2, alert.getAlert_type());
                 preparedStatement.setString(3, alert.getAdvice());
                 preparedStatement.setString(4, alert.getTitle());
-                preparedStatement.setDate(5,alert.getAlert_date());
-                preparedStatement.setString(6,alert.getAlert_cycle());
-                preparedStatement.setString(7,alert.getIs_medicine());
+                preparedStatement.setDate(5, alert.getAlert_date());
+                preparedStatement.setString(6, alert.getAlert_cycle());
+                preparedStatement.setString(7, alert.getIs_medicine());
                 preparedStatement.execute();
             }
             return true;
@@ -83,7 +87,5 @@ public class AlertDAO {
             throw new RuntimeException(e);
         }
     }
-    public boolean syncAlert(Alert alert) {
-        return true;
-    }
+
 }

@@ -18,43 +18,66 @@ import java.util.Map;
 @RequestMapping("/sync")
 public class SyncController {
 
-    private final JDBCHelper jdbcHelper = new JDBCHelper();
-    private final RecordDAO recordDAO = new RecordDAO(jdbcHelper);
-    private final ReportDAO reportDAO = new ReportDAO(jdbcHelper);
-    private final AlertDAO alertDAO = new AlertDAO(jdbcHelper);
 
-    @PostMapping("/getData")
-    public ResponseEntity<?> getData(@RequestBody SyncRequest request) {
-        String phone_number = request.getPhone_number();
+    private final RecordDAO recordDAO;
+    private final ReportDAO reportDAO;
+    private final AlertDAO alertDAO;
+
+    public SyncController(){
+        JDBCHelper jdbcHelper = new JDBCHelper();
+        reportDAO = new ReportDAO(jdbcHelper);
+        recordDAO = new RecordDAO(jdbcHelper);
+        alertDAO = new AlertDAO(jdbcHelper);
+    }
+
+    @PostMapping("/get/record")
+    public ResponseEntity<?> getRecordData(@RequestBody String phoneNumber) {
         try {
-            List<Record> recordList = recordDAO.getData(phone_number);
-            List<Report> reportList = reportDAO.getData(phone_number);
-            List<Alert> alertList = alertDAO.getData(phone_number);
+            List<Record> recordList = recordDAO.getData(phoneNumber);
 
-            ReturnData returnData = new ReturnData(recordList,reportList,alertList,phone_number);
+            System.out.println("Work success");
+            System.out.println(recordList.size());
 
-            // 使用Jackson库将对象转换为JSON字符串
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(returnData);
+            return ResponseEntity.ok(recordList);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
+    @PostMapping("/get/report")
+    public ResponseEntity<?> getReportData(@RequestBody String phoneNumber) {
+        try {
+            List<Report> reportList = reportDAO.getData(phoneNumber);
 
-            return ResponseEntity.ok(jsonData);
+            return ResponseEntity.ok(reportList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PostMapping("/updateData")
-    public ResponseEntity<?> syncData(@RequestBody SyncRequest request){
+    @PostMapping("/get/alert")
+    public ResponseEntity<?> getData(@RequestBody String phoneNumber) {
+        try {
+            List<Alert> alertList = alertDAO.getData(phoneNumber);
+
+            return ResponseEntity.ok(alertList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> syncData(@RequestBody SyncRequest request) {
         List<Record> recordList = request.getRecords();
         List<Report> reportList = request.getReports();
         List<Alert> alertList = request.getAlerts();
-        String phone_number = request.getPhone_number();
+        String phoneNumber = request.getPhone_number();
         try {
 
-            recordDAO.insertData(recordList,phone_number);
-            reportDAO.insertData(reportList,phone_number);
-            alertDAO.insertData(alertList,phone_number);
+            recordDAO.insertData(recordList, phoneNumber);
+            reportDAO.insertData(reportList, phoneNumber);
+            alertDAO.insertData(alertList, phoneNumber);
 
             return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
         } catch (Exception e) {

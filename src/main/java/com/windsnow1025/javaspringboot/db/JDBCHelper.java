@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.6";
+    private static final String DATABASE_VERSION = "1.7";
 
     private Connection connection;
 
@@ -81,9 +81,7 @@ public class JDBCHelper {
                 alert_cycle VARCHAR(255),
                 is_medicine VARCHAR(255),
                 PRIMARY KEY (id),
-                FOREIGN KEY (phone_number) REFERENCES user(phone_number),
-                FOREIGN KEY (record_id) REFERENCES record(id),
-                FOREIGN KEY (report_id) REFERENCES report(id)
+                FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
 
@@ -127,15 +125,9 @@ public class JDBCHelper {
     // Change this function for each new version
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            // Drop all tables
-            statement.executeUpdate("DROP TABLE IF EXISTS metadata");
-            statement.executeUpdate("DROP TABLE IF EXISTS record");
-            statement.executeUpdate("DROP TABLE IF EXISTS report");
+            // drop and create alert table
             statement.executeUpdate("DROP TABLE IF EXISTS alert");
-            statement.executeUpdate("DROP TABLE IF EXISTS user");
-
-            // Recreate all tables
-            onCreate(connection);
+            statement.executeUpdate(CREATE_TABLE_ALERT);
         }
         logger.info("Database upgraded");
     }

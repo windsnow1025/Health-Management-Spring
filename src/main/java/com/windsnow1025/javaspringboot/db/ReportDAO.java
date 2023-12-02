@@ -24,7 +24,7 @@ public class ReportDAO {
         this.jdbcHelper = new JDBCHelper();
     }
 
-    public List<Report> getData(String phone_number){
+    public List<Report> select(String phone_number){
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_REPORT);
         ){
@@ -33,7 +33,7 @@ public class ReportDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()){
-                int report_id = resultSet.getInt("ID");
+                int report_id = resultSet.getInt("id");
                 String report_date = resultSet.getString("report_date");
                 String hospital = resultSet.getString("hospital");
                 String report_type = resultSet.getString("report_type");
@@ -52,24 +52,23 @@ public class ReportDAO {
         }
     }
 
-    private void delete(String phone_number){
+    private boolean delete(String phone_number){
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REPORT)){
             preparedStatement.setString(1,phone_number);
             preparedStatement.execute();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean insertData(List<Report> reportList,String phone_number){
+    public boolean insert(List<Report> reportList){
         try (Connection connection = jdbcHelper.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_REPORT)){
             if (reportList == null){
                 return false;
             }
-
-            delete(phone_number);
 
             for (Report report:reportList){
                 preparedStatement.setString(1,report.getPhone_number());
@@ -84,6 +83,12 @@ public class ReportDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean sync(List<Report> reportList, String phone_number){
+        boolean deleteResult = delete(phone_number);
+        boolean insertResult = insert(reportList);
+        return deleteResult && insertResult;
     }
 
 }

@@ -2,7 +2,7 @@ package com.windsnow1025.javaspringboot.model;
 
 
 public class Report {
-    private int ID;
+    private int id;
     private String phone_number;
     private String report_date;
     private String hospital;
@@ -11,7 +11,7 @@ public class Report {
     private String detail;
 
     public Report(int report_id, String phone_number, String report_date, String hospital, String report_type, String picture, String detail) {
-        this.ID = report_id;
+        this.id = report_id;
         this.phone_number = phone_number;
         this.report_date = report_date;
         this.hospital = hospital;
@@ -20,12 +20,12 @@ public class Report {
         this.detail = detail;
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPhone_number() {

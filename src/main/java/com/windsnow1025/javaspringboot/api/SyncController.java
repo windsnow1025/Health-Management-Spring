@@ -23,7 +23,7 @@ public class SyncController {
     private final ReportDAO reportDAO;
     private final AlertDAO alertDAO;
 
-    public SyncController(){
+    public SyncController() {
         reportDAO = new ReportDAO();
         recordDAO = new RecordDAO();
         alertDAO = new AlertDAO();
@@ -32,80 +32,60 @@ public class SyncController {
     @PostMapping("/get/record")
     public ResponseEntity<?> getRecordData(@RequestBody Map<String, String> request) {
         String phoneNumber = request.get("phoneNumber");
-        try {
-            List<Record> recordList = recordDAO.getData(phoneNumber);
 
-            return ResponseEntity.ok(recordList);
-        } catch (Exception e) {
-            logger.error("Error: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<Record> recordList = recordDAO.select(phoneNumber);
+
+        return ResponseEntity.ok(recordList);
     }
 
     @PostMapping("/get/report")
     public ResponseEntity<?> getReportData(@RequestBody Map<String, String> request) {
         String phoneNumber = request.get("phoneNumber");
-        try {
-            List<Report> reportList = reportDAO.getData(phoneNumber);
 
-            return ResponseEntity.ok(reportList);
-        } catch (Exception e) {
-            logger.error("Error: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<Report> reportList = reportDAO.select(phoneNumber);
+
+        return ResponseEntity.ok(reportList);
     }
 
     @PostMapping("/get/alert")
     public ResponseEntity<?> getData(@RequestBody Map<String, String> request) {
         String phoneNumber = request.get("phoneNumber");
-        try {
-            List<Alert> alertList = alertDAO.getData(phoneNumber);
 
-            return ResponseEntity.ok(alertList);
-        } catch (Exception e) {
-            logger.error("Error: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<Alert> alertList = alertDAO.select(phoneNumber);
+
+        return ResponseEntity.ok(alertList);
     }
 
     @PutMapping("/update/record")
     public ResponseEntity<?> syncRecordData(@RequestBody SyncRequest<Record> request) {
         List<Record> recordList = request.getData();
-
         String phoneNumber = request.getPhone_number();
-        try {
-            recordDAO.insertData(recordList, phoneNumber);
 
-            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        recordDAO.sync(recordList, phoneNumber);
+
+        return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
+
     }
+
     @PutMapping("/update/report")
     public ResponseEntity<?> syncReportData(@RequestBody SyncRequest<Report> request) {
         List<Report> reportList = request.getData();
-
         String phoneNumber = request.getPhone_number();
-        try {
-            reportDAO.insertData(reportList, phoneNumber);
 
-            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        reportDAO.sync(reportList, phoneNumber);
+
+        return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
     }
+
     @PutMapping("/update/alert")
     public ResponseEntity<?> syncData(@RequestBody SyncRequest<Alert> request) {
         List<Alert> alertList = request.getData();
-
         String phoneNumber = request.getPhone_number();
-        try {
-            alertDAO.insertData(alertList, phoneNumber);
 
-            return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        alertDAO.sync(alertList, phoneNumber);
+
+        return ResponseEntity.ok(Map.of("status", "Success", "message", "Update successful"));
+
     }
 }
 

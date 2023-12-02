@@ -25,7 +25,7 @@ public class RecordDAO {
         this.jdbcHelper = new JDBCHelper();
     }
 
-    public List<Record> getData(String phone_number) {
+    public List<Record> select(String phone_number) {
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_RECORD);
         ) {
@@ -34,7 +34,7 @@ public class RecordDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int record_id = resultSet.getInt("ID");
+                int record_id = resultSet.getInt("id");
                 String record_date = resultSet.getString("record_date");
                 String hospital = resultSet.getString("hospital");
                 String doctor = resultSet.getString("doctor");
@@ -42,7 +42,7 @@ public class RecordDAO {
                 String symptom = resultSet.getString("symptom");
                 String conclusion = resultSet.getString("conclusion");
                 String suggestion = resultSet.getString("suggestion");
-                recordList.add(new Record(record_id,phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion));
+                recordList.add(new Record(record_id, phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion));
             }
 
             if (recordList.isEmpty()) {
@@ -55,25 +55,24 @@ public class RecordDAO {
         }
     }
 
-    private void delete(String phone_number) {
+    private boolean delete(String phone_number) {
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_RECORD)) {
             preparedStatement.setString(1, phone_number);
             preparedStatement.execute();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean insertData(List<Record> recordList, String phone_number) {
+    public boolean insert(List<Record> recordList) {
 
         try (Connection connection = jdbcHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_RECORD)) {
             if (recordList == null) {
                 return false;
             }
-
-            delete(phone_number);
 
             for (Record record : recordList) {
                 preparedStatement.setString(1, record.getPhone_number());
@@ -92,4 +91,9 @@ public class RecordDAO {
         }
     }
 
+    public boolean sync(List<Record> recordList, String phone_number) {
+        boolean deleteResult = delete(phone_number);
+        boolean insertResult = insert(recordList);
+        return deleteResult && insertResult;
+    }
 }

@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.5";
+    private static final String DATABASE_VERSION = "1.6";
 
     private Connection connection;
 
@@ -23,11 +23,12 @@ public class JDBCHelper {
 
     private static final String CREATE_TABLE_USER = """
             CREATE TABLE IF NOT EXISTS user (
-                phone_number VARCHAR(255) PRIMARY KEY,
+                phone_number VARCHAR(255),
                 username VARCHAR(255),
                 password VARCHAR(255),
                 birthday VARCHAR(255),
-                sex VARCHAR(255)
+                sex VARCHAR(255),
+                PRIMARY KEY (phone_number)
             );
             """;
 
@@ -35,7 +36,7 @@ public class JDBCHelper {
     // organ 是器官
     private static final String CREATE_TABLE_RECORD = """
             CREATE TABLE IF NOT EXISTS record (
-                ID INT AUTO_INCREMENT PRIMARY KEY,
+                id INT AUTO_INCREMENT,
                 phone_number VARCHAR(255),
                 record_date VARCHAR(255),
                 hospital VARCHAR(255),
@@ -44,6 +45,7 @@ public class JDBCHelper {
                 symptom TEXT,
                 conclusion TEXT,
                 suggestion TEXT,
+                PRIMARY KEY (id),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
@@ -52,13 +54,14 @@ public class JDBCHelper {
     // report_type 是全检 / 部分检查
     private static final String CREATE_TABLE_REPORT = """
             CREATE TABLE IF NOT EXISTS report (
-                ID INT AUTO_INCREMENT PRIMARY KEY,
+                id INT AUTO_INCREMENT,
                 phone_number VARCHAR(255),
                 report_date VARCHAR(255),
                 hospital VARCHAR(255),
                 report_type VARCHAR(255),
                 picture BLOB,
                 detail TEXT,
+                PRIMARY KEY (id),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
@@ -67,7 +70,9 @@ public class JDBCHelper {
     // alert_type 在record里是organ，在report里是report_type
     private static final String CREATE_TABLE_ALERT = """
             CREATE TABLE IF NOT EXISTS alert (
-                ID INT AUTO_INCREMENT PRIMARY KEY,
+                id INT AUTO_INCREMENT,
+                record_id INT,
+                report_id INT,
                 phone_number VARCHAR(255),
                 alert_type VARCHAR(255),
                 advice TEXT,
@@ -75,7 +80,10 @@ public class JDBCHelper {
                 alert_date VARCHAR(255),
                 alert_cycle VARCHAR(255),
                 is_medicine VARCHAR(255),
-                FOREIGN KEY (phone_number) REFERENCES user(phone_number)
+                PRIMARY KEY (id),
+                FOREIGN KEY (phone_number) REFERENCES user(phone_number),
+                FOREIGN KEY (record_id) REFERENCES record(id),
+                FOREIGN KEY (report_id) REFERENCES report(id)
             );
             """;
 
@@ -121,7 +129,6 @@ public class JDBCHelper {
         try (Statement statement = connection.createStatement()) {
             // Drop all tables
             statement.executeUpdate("DROP TABLE IF EXISTS metadata");
-            statement.executeUpdate("DROP TABLE IF EXISTS history");
             statement.executeUpdate("DROP TABLE IF EXISTS record");
             statement.executeUpdate("DROP TABLE IF EXISTS report");
             statement.executeUpdate("DROP TABLE IF EXISTS alert");

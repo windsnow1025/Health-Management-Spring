@@ -2,7 +2,9 @@ package com.windsnow1025.javaspringboot.model;
 
 
 public class Alert {
-    private int ID;
+    private int id;
+    private int record_id;
+    private int report_id;
     private String phone_number;
     private String alert_type;
     private String advice;
@@ -11,8 +13,10 @@ public class Alert {
     private String alert_cycle;
     private String is_medicine;
 
-    public Alert(int alert_id,String phone_number, String alert_type, String advice, String title, String alert_date, String alert_cycle, String is_medicine) {
-        this.ID = alert_id;
+    public Alert(int id, int record_id, int report_id, String phone_number, String alert_type, String advice, String title, String alert_date, String alert_cycle, String is_medicine) {
+        this.id = id;
+        this.record_id = record_id;
+        this.report_id = report_id;
         this.phone_number = phone_number;
         this.alert_type = alert_type;
         this.advice = advice;
@@ -22,12 +26,28 @@ public class Alert {
         this.is_medicine = is_medicine;
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getRecord_id() {
+        return record_id;
+    }
+
+    public void setRecord_id(int record_id) {
+        this.record_id = record_id;
+    }
+
+    public int getReport_id() {
+        return report_id;
+    }
+
+    public void setReport_id(int report_id) {
+        this.report_id = report_id;
     }
 
     public String getPhone_number() {

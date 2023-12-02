@@ -79,7 +79,7 @@ public class UserController {
             if (isExist) {
                 return ResponseEntity.ok(Map.of("status", "Success", "message", "User exist"));
             } else {
-                return ResponseEntity.badRequest().body(Map.of("status", "Failure", "message", "User not exist"));
+                return ResponseEntity.ok(Map.of("status", "Failure", "message", "User not exist"));
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("status", "Error", "message", e.getMessage()));

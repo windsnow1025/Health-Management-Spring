@@ -89,7 +89,7 @@ public class UserDAO {
 
             return resultSet.next();
         } catch (SQLException e) {
-            throw new RuntimeException("Check failed", e);
+            return false;
         }
     }
 

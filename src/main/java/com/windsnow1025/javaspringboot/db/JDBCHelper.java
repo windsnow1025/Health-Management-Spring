@@ -10,7 +10,7 @@ public class JDBCHelper {
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.7";
+    private static final String DATABASE_VERSION = "1.8";
 
     private Connection connection;
 
@@ -125,9 +125,15 @@ public class JDBCHelper {
     // Change this function for each new version
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            // drop and create alert table
+            // drop all
             statement.executeUpdate("DROP TABLE IF EXISTS alert");
-            statement.executeUpdate(CREATE_TABLE_ALERT);
+            statement.executeUpdate("DROP TABLE IF EXISTS record");
+            statement.executeUpdate("DROP TABLE IF EXISTS report");
+            statement.executeUpdate("DROP TABLE IF EXISTS user");
+            statement.executeUpdate("DROP TABLE IF EXISTS metadata");
+
+            // create all
+            statement.executeUpdate(CREATE_TABLE_METADATA);
         }
         logger.info("Database upgraded");
     }

@@ -13,8 +13,8 @@ public class ReportDAO {
             WHERE phone_number = ?
             """;
     private static final String INSERT_REPORT = """
-            INSERT INTO report(phone_number, report_date, hospital, report_type, picture, detail)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO report(id, phone_number, report_date, hospital, report_type, picture, detail)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
     private static final String DELETE_REPORT = """
             DELETE FROM report WHERE phone_number = ?
@@ -71,12 +71,13 @@ public class ReportDAO {
             }
 
             for (Report report:reportList){
-                preparedStatement.setString(1,report.getPhone_number());
-                preparedStatement.setString(2,report.getReport_date());
-                preparedStatement.setString(3,report.getHospital());
-                preparedStatement.setString(4,report.getReport_type());
-                preparedStatement.setString(5,report.getPicture());
-                preparedStatement.setString(6,report.getDetail());
+                preparedStatement.setInt(1,report.getId());
+                preparedStatement.setString(2,report.getPhone_number());
+                preparedStatement.setString(3,report.getReport_date());
+                preparedStatement.setString(4,report.getHospital());
+                preparedStatement.setString(5,report.getReport_type());
+                preparedStatement.setString(6,report.getPicture());
+                preparedStatement.setString(7,report.getDetail());
                 preparedStatement.execute();
             }
             return true;

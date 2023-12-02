@@ -16,7 +16,7 @@ public class RecordDAO {
             WHERE phone_number = ?
             """;
     private static final String INSERT_RECORD = """
-            INSERT INTO record(phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion)
+            INSERT INTO record(id, phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private JDBCHelper jdbcHelper;
@@ -75,14 +75,15 @@ public class RecordDAO {
             }
 
             for (Record record : recordList) {
-                preparedStatement.setString(1, record.getPhone_number());
-                preparedStatement.setString(2, record.getRecord_date());
-                preparedStatement.setString(3, record.getHospital());
-                preparedStatement.setString(4, record.getDoctor());
-                preparedStatement.setString(5, record.getOrgan());
-                preparedStatement.setString(6, record.getSymptom());
-                preparedStatement.setString(7, record.getConclusion());
-                preparedStatement.setString(8, record.getSuggestion());
+                preparedStatement.setInt(1, record.getId());
+                preparedStatement.setString(2, record.getPhone_number());
+                preparedStatement.setString(3, record.getRecord_date());
+                preparedStatement.setString(4, record.getHospital());
+                preparedStatement.setString(5, record.getDoctor());
+                preparedStatement.setString(6, record.getOrgan());
+                preparedStatement.setString(7, record.getSymptom());
+                preparedStatement.setString(8, record.getConclusion());
+                preparedStatement.setString(9, record.getSuggestion());
                 preparedStatement.execute();
             }
             return true;

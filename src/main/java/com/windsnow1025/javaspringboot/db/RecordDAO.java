@@ -17,7 +17,7 @@ public class RecordDAO {
             """;
     private static final String INSERT_RECORD = """
             INSERT INTO record(id, phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private JDBCHelper jdbcHelper;
 

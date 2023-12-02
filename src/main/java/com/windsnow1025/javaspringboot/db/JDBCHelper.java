@@ -36,7 +36,7 @@ public class JDBCHelper {
     // organ 是器官
     private static final String CREATE_TABLE_RECORD = """
             CREATE TABLE IF NOT EXISTS record (
-                id INT AUTO_INCREMENT,
+                id INT,
                 phone_number VARCHAR(255),
                 record_date VARCHAR(255),
                 hospital VARCHAR(255),
@@ -45,7 +45,7 @@ public class JDBCHelper {
                 symptom TEXT,
                 conclusion TEXT,
                 suggestion TEXT,
-                PRIMARY KEY (id),
+                PRIMARY KEY (id, phone_number),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;
@@ -54,14 +54,14 @@ public class JDBCHelper {
     // report_type 是全检 / 部分检查
     private static final String CREATE_TABLE_REPORT = """
             CREATE TABLE IF NOT EXISTS report (
-                id INT AUTO_INCREMENT,
+                id INT,
                 phone_number VARCHAR(255),
                 report_date VARCHAR(255),
                 hospital VARCHAR(255),
                 report_type VARCHAR(255),
                 picture BLOB,
                 detail TEXT,
-                PRIMARY KEY (id),
+                PRIMARY KEY (id, phone_number),
                 FOREIGN KEY (phone_number) REFERENCES user(phone_number)
             );
             """;

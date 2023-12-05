@@ -1,5 +1,7 @@
 package com.windsnow1025.javaspringboot.db;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +9,7 @@ import java.sql.*;
 
 public class JDBCHelper {
     private static final Logger logger = LoggerFactory.getLogger(JDBCHelper.class);
+    private static HikariDataSource dataSource;
     private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
@@ -91,8 +94,14 @@ public class JDBCHelper {
 
     public JDBCHelper() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(DATABASE_URL);
+            config.setUsername(DATABASE_USER);
+            config.setPassword(DATABASE_PASSWORD);
+            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            dataSource = new HikariDataSource(config);
+
+            connection = getConnection();
             String currentVersion = getDatabaseVersionFromMetadata();
             if (currentVersion == null) {
                 onCreate(connection); // Initialize database version to 0
@@ -101,13 +110,13 @@ public class JDBCHelper {
                 onUpgrade(connection);
                 setDatabaseVersionInMetadata();
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             logger.error("Database connection failed", e);
         }
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
+        return dataSource.getConnection();
     }
 
     public void onCreate(Connection connection) throws SQLException {

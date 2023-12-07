@@ -10,7 +10,7 @@ import java.sql.*;
 public class JDBCHelper {
     private static final Logger logger = LoggerFactory.getLogger(JDBCHelper.class);
     private static HikariDataSource dataSource;
-    private static final String DATABASE_URL = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
+    private static final String DATABASE_URL = "jdbc:mysql://learn-android-mysql:3306/" + System.getenv("MYSQL_DATABASE");
     private static final String DATABASE_USER = System.getenv("MYSQL_USER");
     private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
     private static final String DATABASE_VERSION = "1.8";

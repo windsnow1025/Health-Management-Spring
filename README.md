@@ -1,8 +1,14 @@
-# API
+# Health-Management-Spring
 
-## Sync
+A Spring Boot backend for the Health Management App
 
-### Update report
+## Requirements
+
+JAVA 21
+
+## API Examples
+
+### sync/update/report
 
 ```json
 {

@@ -1,28 +1,8 @@
 package com.windsnow1025.javaspringboot.db;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.*;
 
-public class JDBCHelper {
-    private static final Logger logger = LoggerFactory.getLogger(JDBCHelper.class);
-    private static HikariDataSource dataSource;
-    private static final String DATABASE_URL = "jdbc:mysql://learn-android-mysql:3306/" + System.getenv("MYSQL_DATABASE");
-    private static final String DATABASE_USER = System.getenv("MYSQL_USER");
-    private static final String DATABASE_PASSWORD = System.getenv("MYSQL_PASSWORD");
-    private static final String DATABASE_VERSION = "1.8";
-
-    private Connection connection;
-
-    private static final String CREATE_TABLE_METADATA = """
-            CREATE TABLE IF NOT EXISTS metadata (
-                version VARCHAR(255)
-            );
-            """;
-
+public class JDBCHelper extends DatabaseHelper {
 
     private static final String CREATE_TABLE_USER = """
             CREATE TABLE IF NOT EXISTS user (
@@ -88,50 +68,35 @@ public class JDBCHelper {
             );
             """;
 
-    private static final String INSERT_METADATA = """
-            INSERT INTO metadata (version) VALUES (0)
-            """;
 
     public JDBCHelper() {
-        try {
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(DATABASE_URL);
-            config.setUsername(DATABASE_USER);
-            config.setPassword(DATABASE_PASSWORD);
-            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource = new HikariDataSource(config);
-
-            connection = getConnection();
-            String currentVersion = getDatabaseVersionFromMetadata();
-            if (currentVersion == null) {
-                onCreate(connection); // Initialize database version to 0
-                setDatabaseVersionInMetadata();
-            } else if (!currentVersion.equals(DATABASE_VERSION)) {
-                onUpgrade(connection);
-                setDatabaseVersionInMetadata();
-            }
-        } catch (SQLException e) {
-            logger.error("Database connection failed", e);
-        }
+        super();
     }
 
-    public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+    @Override
+    public void setDatabaseConfig() {
+        dbUrl = "jdbc:mysql://learn-android-mysql:3306/" + System.getenv("MYSQL_DATABASE");
+        dbUsername = System.getenv("MYSQL_USER");
+        dbPassword = System.getenv("MYSQL_PASSWORD");
+        dbDriverClassName = "com.mysql.cj.jdbc.Driver";
+        dbVersion = "1.8";
     }
 
+    @Override
     public void onCreate(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(CREATE_TABLE_METADATA);
             statement.executeUpdate(CREATE_TABLE_USER);
             statement.executeUpdate(CREATE_TABLE_RECORD);
             statement.executeUpdate(CREATE_TABLE_REPORT);
             statement.executeUpdate(CREATE_TABLE_ALERT);
-            statement.executeUpdate(INSERT_METADATA);
         }
+
+        createMetadata();
+        insertVersion();
         logger.info("Database created");
     }
 
-    // Change this function for each new version
+    @Override
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             // drop all
@@ -139,41 +104,16 @@ public class JDBCHelper {
             statement.executeUpdate("DROP TABLE IF EXISTS record");
             statement.executeUpdate("DROP TABLE IF EXISTS report");
             statement.executeUpdate("DROP TABLE IF EXISTS user");
-            statement.executeUpdate("DROP TABLE IF EXISTS metadata");
 
             // create all
-            statement.executeUpdate(CREATE_TABLE_METADATA);
+            statement.executeUpdate(CREATE_TABLE_USER);
+            statement.executeUpdate(CREATE_TABLE_RECORD);
+            statement.executeUpdate(CREATE_TABLE_REPORT);
+            statement.executeUpdate(CREATE_TABLE_ALERT);
         }
+
+        updateVersion();
         logger.info("Database upgraded");
     }
 
-    private String getDatabaseVersionFromMetadata() {
-        final String SELECT_METADATA = "SELECT version FROM metadata";
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_METADATA)) {
-            if (resultSet.next()) {
-                return resultSet.getString("version");
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    private void setDatabaseVersionInMetadata() throws SQLException {
-        final String UPDATE_METADATA = """
-                UPDATE metadata SET version = ?
-                """;
-        try (PreparedStatement updateStatement = connection.prepareStatement(UPDATE_METADATA)) {
-            updateStatement.setString(1, DATABASE_VERSION);
-            updateStatement.executeUpdate();
-        }
-    }
-
-    public void closeConnection() throws SQLException {
-        if (connection != null) {
-            connection.close();
-        }
-    }
 }

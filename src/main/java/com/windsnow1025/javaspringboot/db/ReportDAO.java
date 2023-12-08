@@ -1,12 +1,19 @@
 package com.windsnow1025.javaspringboot.db;
 
+import com.windsnow1025.javaspringboot.api.SyncController;
 import com.windsnow1025.javaspringboot.model.Report;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Base64;
+
 public class ReportDAO {
+
+    private static final Logger logger = LoggerFactory.getLogger(SyncController.class);
     private static final String SELECT_REPORT = """
             SELECT *
             FROM report
@@ -37,8 +44,12 @@ public class ReportDAO {
                 String report_date = resultSet.getString("report_date");
                 String hospital = resultSet.getString("hospital");
                 String report_type = resultSet.getString("report_type");
-                String picture = resultSet.getString("picture");
+
+                byte[] pictureBytes = resultSet.getBytes("picture");
+                String picture = (pictureBytes != null) ? Base64.getEncoder().encodeToString(pictureBytes) : null;
+
                 String detail = resultSet.getString("detail");
+
                 reportList.add(new Report(report_id,phone_number, report_date, hospital, report_type, picture, detail));
             }
 
@@ -76,7 +87,18 @@ public class ReportDAO {
                 preparedStatement.setString(3,report.getReport_date());
                 preparedStatement.setString(4,report.getHospital());
                 preparedStatement.setString(5,report.getReport_type());
-                preparedStatement.setString(6,report.getPicture());
+
+                String base64String = report.getPicture();
+                byte[] pictureBytes = null;
+                if (base64String != null && !base64String.isEmpty()) {
+                    try {
+                        pictureBytes = Base64.getDecoder().decode(base64String);
+                    } catch (IllegalArgumentException e) {
+                        logger.error("Base64 decoding failed", e);
+                    }
+                }
+
+                preparedStatement.setBytes(6,pictureBytes);
                 preparedStatement.setString(7,report.getDetail());
                 preparedStatement.execute();
             }

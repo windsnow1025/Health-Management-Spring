@@ -99,13 +99,13 @@ public class JDBCHelper extends DatabaseHelper {
     @Override
     public void onUpgrade(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            // drop all
+            // Drop all
             statement.executeUpdate("DROP TABLE IF EXISTS alert");
             statement.executeUpdate("DROP TABLE IF EXISTS record");
             statement.executeUpdate("DROP TABLE IF EXISTS report");
             statement.executeUpdate("DROP TABLE IF EXISTS user");
 
-            // create all
+            // Create all
             statement.executeUpdate(CREATE_TABLE_USER);
             statement.executeUpdate(CREATE_TABLE_RECORD);
             statement.executeUpdate(CREATE_TABLE_REPORT);

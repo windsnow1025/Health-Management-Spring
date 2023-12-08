@@ -4,6 +4,7 @@ import com.windsnow1025.javaspringboot.model.Record;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RecordDAO {
@@ -46,7 +47,7 @@ public class RecordDAO {
             }
 
             if (recordList.isEmpty()) {
-                return null;
+                return Collections.emptyList();
             }
 
             return recordList;

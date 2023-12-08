@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import java.util.Base64;
@@ -54,7 +55,7 @@ public class ReportDAO {
             }
 
             if (reportList.isEmpty()) {
-                return null;
+                return Collections.emptyList();
             }
 
             return reportList;

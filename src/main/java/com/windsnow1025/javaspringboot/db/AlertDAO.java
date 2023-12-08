@@ -4,6 +4,7 @@ import com.windsnow1025.javaspringboot.model.Alert;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AlertDAO {
@@ -47,7 +48,7 @@ public class AlertDAO {
                 alertList.add(new Alert(id, record_id, report_id, phone_number, alert_type, advice, title, alert_date, alert_cycle, is_medicine));
             }
             if (alertList.isEmpty()) {
-                return null;
+                return Collections.emptyList();
             }
 
             return alertList;

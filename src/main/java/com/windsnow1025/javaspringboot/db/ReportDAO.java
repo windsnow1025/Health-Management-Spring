@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import java.util.Base64;
 
@@ -28,88 +26,70 @@ public class ReportDAO {
             DELETE FROM report WHERE phone_number = ?
             """;
     private JDBCHelper jdbcHelper;
-    public ReportDAO(){
+
+    public ReportDAO() {
         this.jdbcHelper = new JDBCHelper();
     }
 
-    public List<Report> select(String phone_number){
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_REPORT);
-        ){
+    public List<Report> select(String phoneNumber) {
+        try {
+            List<Map<String, Object>> results = jdbcHelper.select(SELECT_REPORT, phoneNumber);
             List<Report> reportList = new ArrayList<>();
-            preparedStatement.setString(1,phone_number);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()){
-                int report_id = resultSet.getInt("id");
-                String report_date = resultSet.getString("report_date");
-                String hospital = resultSet.getString("hospital");
-                String report_type = resultSet.getString("report_type");
-
-                byte[] pictureBytes = resultSet.getBytes("picture");
+            for (Map<String, Object> row : results) {
+                byte[] pictureBytes = (byte[]) row.get("picture");
                 String picture = (pictureBytes != null) ? Base64.getEncoder().encodeToString(pictureBytes) : null;
 
-                String detail = resultSet.getString("detail");
-
-                reportList.add(new Report(report_id,phone_number, report_date, hospital, report_type, picture, detail));
+                reportList.add(new Report(
+                        (Integer) row.get("id"),
+                        (String) row.get("phone_number"),
+                        (String) row.get("report_date"),
+                        (String) row.get("hospital"),
+                        (String) row.get("report_type"),
+                        picture,
+                        (String) row.get("detail")
+                ));
             }
-
-            if (reportList.isEmpty()) {
-                return Collections.emptyList();
-            }
-
             return reportList;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Select reports failed", e);
         }
     }
 
-    private boolean delete(String phone_number){
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REPORT)){
-            preparedStatement.setString(1,phone_number);
-            preparedStatement.execute();
+    private boolean delete(String phoneNumber) {
+        try {
+            jdbcHelper.executeUpdate(DELETE_REPORT, phoneNumber);
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Delete reports failed", e);
         }
     }
 
-    public boolean insert(List<Report> reportList){
-        try (Connection connection = jdbcHelper.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_REPORT)){
-            if (reportList == null){
-                return false;
-            }
-
-            for (Report report:reportList){
-                preparedStatement.setInt(1,report.getId());
-                preparedStatement.setString(2,report.getPhone_number());
-                preparedStatement.setString(3,report.getReport_date());
-                preparedStatement.setString(4,report.getHospital());
-                preparedStatement.setString(5,report.getReport_type());
-
+    public boolean insert(List<Report> reportList) {
+        try {
+            for (Report report : reportList) {
                 String base64String = report.getPicture();
                 byte[] pictureBytes = null;
                 if (base64String != null && !base64String.isEmpty()) {
-                    try {
-                        pictureBytes = Base64.getDecoder().decode(base64String);
-                    } catch (IllegalArgumentException e) {
-                        logger.error("Base64 decoding failed", e);
-                    }
+                    pictureBytes = Base64.getDecoder().decode(base64String);
                 }
 
-                preparedStatement.setBytes(6,pictureBytes);
-                preparedStatement.setString(7,report.getDetail());
-                preparedStatement.execute();
+                jdbcHelper.executeUpdate(INSERT_REPORT,
+                        report.getId(),
+                        report.getPhone_number(),
+                        report.getReport_date(),
+                        report.getHospital(),
+                        report.getReport_type(),
+                        pictureBytes,
+                        report.getDetail()
+                );
             }
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Insert reports failed", e);
         }
     }
 
-    public boolean sync(List<Report> reportList, String phone_number){
+    public boolean sync(List<Report> reportList, String phone_number) {
         boolean deleteResult = delete(phone_number);
         boolean insertResult = insert(reportList);
         return deleteResult && insertResult;

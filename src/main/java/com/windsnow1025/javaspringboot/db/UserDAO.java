@@ -2,10 +2,8 @@ package com.windsnow1025.javaspringboot.db;
 
 import com.windsnow1025.javaspringboot.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.*;
 
 public class UserDAO {
 
@@ -47,18 +45,16 @@ public class UserDAO {
     }
 
     public User signin(String phoneNumber, String password) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(LOGIN_QUERY)) {
-            statement.setString(1, phoneNumber);
-            statement.setString(2, password);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                String phone_number = resultSet.getString("phone_number");
-                String username = resultSet.getString("username");
-                String sex = resultSet.getString("sex");
-                String birthday = resultSet.getString("birthday");
-                return new User(phone_number, username, sex, birthday);
+        try {
+            List<Map<String, Object>> results = jdbcHelper.select(LOGIN_QUERY, phoneNumber, password);
+            if (!results.isEmpty()) {
+                Map<String, Object> row = results.get(0);
+                return new User(
+                        (String) row.get("phone_number"),
+                        (String) row.get("username"),
+                        (String) row.get("sex"),
+                        (String) row.get("birthday")
+                );
             }
             return null;
         } catch (SQLException e) {
@@ -67,14 +63,8 @@ public class UserDAO {
     }
 
     public boolean signup(String phoneNumber, String password, String sex, String birthday) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SIGNUP_QUERY)) {
-            statement.setString(1, phoneNumber);
-            statement.setString(2, password);
-            statement.setString(3, sex);
-            statement.setString(4, birthday);
-            statement.executeUpdate();
-
+        try {
+            jdbcHelper.executeUpdate(SIGNUP_QUERY, phoneNumber, password, sex, birthday);
             return true;
         } catch (SQLException e) {
             throw new RuntimeException("Signup failed", e);
@@ -82,29 +72,25 @@ public class UserDAO {
     }
 
     public boolean isExist(String phoneNumber) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(IS_EXIST_QUERY)) {
-            statement.setString(1, phoneNumber);
-            ResultSet resultSet = statement.executeQuery();
-
-            return resultSet.next();
+        try {
+            List<Map<String, Object>> results = jdbcHelper.select(IS_EXIST_QUERY, phoneNumber);
+            return !results.isEmpty();
         } catch (SQLException e) {
             return false;
         }
     }
 
     public User selectUser(String phoneNumber) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_USER_QUERY)) {
-            statement.setString(1, phoneNumber);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                String phone_number = resultSet.getString("phone_number");
-                String username = resultSet.getString("username");
-                String sex = resultSet.getString("sex");
-                String birthday = resultSet.getString("birthday");
-                return new User(phone_number, username, sex, birthday);
+        try {
+            List<Map<String, Object>> results = jdbcHelper.select(SELECT_USER_QUERY, phoneNumber);
+            if (!results.isEmpty()) {
+                Map<String, Object> row = results.get(0);
+                return new User(
+                        (String) row.get("phone_number"),
+                        (String) row.get("username"),
+                        (String) row.get("sex"),
+                        (String) row.get("birthday")
+                );
             }
             return null;
         } catch (SQLException e) {
@@ -113,12 +99,8 @@ public class UserDAO {
     }
 
     public boolean updatePassword(String phoneNumber, String password) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_PASSWORD_QUERY)) {
-            statement.setString(1, password);
-            statement.setString(2, phoneNumber);
-            statement.executeUpdate();
-
+        try {
+            jdbcHelper.executeUpdate(UPDATE_PASSWORD_QUERY, password, phoneNumber);
             return true;
         } catch (SQLException e) {
             throw new RuntimeException("Update failed", e);
@@ -126,12 +108,8 @@ public class UserDAO {
     }
 
     public boolean updateUsername(String phoneNumber, String username) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USERNAME_QUERY)) {
-            statement.setString(1, username);
-            statement.setString(2, phoneNumber);
-            statement.executeUpdate();
-
+        try {
+            jdbcHelper.executeUpdate(UPDATE_USERNAME_QUERY, username, phoneNumber);
             return true;
         } catch (SQLException e) {
             throw new RuntimeException("Update failed", e);
@@ -139,12 +117,8 @@ public class UserDAO {
     }
 
     public boolean updateBirthday(String phoneNumber, String birthday) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_BIRTHDAY_QUERY)) {
-            statement.setString(1, birthday);
-            statement.setString(2, phoneNumber);
-            statement.executeUpdate();
-
+        try {
+            jdbcHelper.executeUpdate(UPDATE_BIRTHDAY_QUERY, birthday, phoneNumber);
             return true;
         } catch (SQLException e) {
             throw new RuntimeException("Update failed", e);

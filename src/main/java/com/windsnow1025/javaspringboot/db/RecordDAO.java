@@ -3,9 +3,7 @@ package com.windsnow1025.javaspringboot.db;
 import com.windsnow1025.javaspringboot.model.Record;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class RecordDAO {
     private static final String SELECT_RECORD = """
@@ -26,70 +24,56 @@ public class RecordDAO {
         this.jdbcHelper = new JDBCHelper();
     }
 
-    public List<Record> select(String phone_number) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_RECORD);
-        ) {
+    public List<Record> select(String phoneNumber) {
+        try {
+            List<Map<String, Object>> results = jdbcHelper.select(SELECT_RECORD, phoneNumber);
             List<Record> recordList = new ArrayList<>();
-            preparedStatement.setString(1, phone_number);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                int record_id = resultSet.getInt("id");
-                String record_date = resultSet.getString("record_date");
-                String hospital = resultSet.getString("hospital");
-                String doctor = resultSet.getString("doctor");
-                String organ = resultSet.getString("organ");
-                String symptom = resultSet.getString("symptom");
-                String conclusion = resultSet.getString("conclusion");
-                String suggestion = resultSet.getString("suggestion");
-                recordList.add(new Record(record_id, phone_number, record_date, hospital, doctor, organ, symptom, conclusion, suggestion));
+            for (Map<String, Object> row : results) {
+                recordList.add(new Record(
+                        (Integer) row.get("id"),
+                        (String) row.get("phone_number"),
+                        (String) row.get("record_date"),
+                        (String) row.get("hospital"),
+                        (String) row.get("doctor"),
+                        (String) row.get("organ"),
+                        (String) row.get("symptom"),
+                        (String) row.get("conclusion"),
+                        (String) row.get("suggestion")
+                ));
             }
-
-            if (recordList.isEmpty()) {
-                return Collections.emptyList();
-            }
-
             return recordList;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Select records failed", e);
         }
     }
 
-    private boolean delete(String phone_number) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_RECORD)) {
-            preparedStatement.setString(1, phone_number);
-            preparedStatement.execute();
+    private boolean delete(String phoneNumber) {
+        try {
+            jdbcHelper.executeUpdate(DELETE_RECORD, phoneNumber);
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Delete records failed", e);
         }
     }
 
     public boolean insert(List<Record> recordList) {
-
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_RECORD)) {
-            if (recordList == null) {
-                return false;
-            }
-
+        try {
             for (Record record : recordList) {
-                preparedStatement.setInt(1, record.getId());
-                preparedStatement.setString(2, record.getPhone_number());
-                preparedStatement.setString(3, record.getRecord_date());
-                preparedStatement.setString(4, record.getHospital());
-                preparedStatement.setString(5, record.getDoctor());
-                preparedStatement.setString(6, record.getOrgan());
-                preparedStatement.setString(7, record.getSymptom());
-                preparedStatement.setString(8, record.getConclusion());
-                preparedStatement.setString(9, record.getSuggestion());
-                preparedStatement.execute();
+                jdbcHelper.executeUpdate(INSERT_RECORD,
+                        record.getId(),
+                        record.getPhone_number(),
+                        record.getRecord_date(),
+                        record.getHospital(),
+                        record.getDoctor(),
+                        record.getOrgan(),
+                        record.getSymptom(),
+                        record.getConclusion(),
+                        record.getSuggestion()
+                );
             }
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Insert records failed", e);
         }
     }
 

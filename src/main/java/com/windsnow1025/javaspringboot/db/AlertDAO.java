@@ -3,9 +3,7 @@ package com.windsnow1025.javaspringboot.db;
 import com.windsnow1025.javaspringboot.model.Alert;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class AlertDAO {
     private static final String SELECT_ALERT = """
@@ -28,68 +26,57 @@ public class AlertDAO {
         this.jdbcHelper = new JDBCHelper();
     }
 
-    public List<Alert> select(String phone_number) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALERT)) {
+    public List<Alert> select(String phoneNumber) {
+        try {
+            List<Map<String, Object>> results = jdbcHelper.select(SELECT_ALERT, phoneNumber);
             List<Alert> alertList = new ArrayList<>();
-            preparedStatement.setString(1, phone_number);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int record_id = resultSet.getInt("record_id");
-                int report_id = resultSet.getInt("report_id");
-                String alert_type = resultSet.getString("alert_type");
-                String advice = resultSet.getString("advice");
-                String title = resultSet.getString("title");
-                String alert_date = resultSet.getString("alert_date");
-                String alert_cycle = resultSet.getString("alert_cycle");
-                String is_medicine = resultSet.getString("is_medicine");
-                alertList.add(new Alert(id, record_id, report_id, phone_number, alert_type, advice, title, alert_date, alert_cycle, is_medicine));
+            for (Map<String, Object> row : results) {
+                alertList.add(new Alert(
+                        (Integer) row.get("id"),
+                        (Integer) row.get("record_id"),
+                        (Integer) row.get("report_id"),
+                        phoneNumber,
+                        (String) row.get("alert_type"),
+                        (String) row.get("advice"),
+                        (String) row.get("title"),
+                        (String) row.get("alert_date"),
+                        (String) row.get("alert_cycle"),
+                        (String) row.get("is_medicine")
+                ));
             }
-            if (alertList.isEmpty()) {
-                return Collections.emptyList();
-            }
-
             return alertList;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Select alerts failed", e);
         }
     }
 
-    private boolean delete(String phone_number) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALERT)) {
-            preparedStatement.setString(1, phone_number);
-            preparedStatement.execute();
+    private boolean delete(String phoneNumber) {
+        try {
+            jdbcHelper.executeUpdate(DELETE_ALERT, phoneNumber);
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Delete alerts failed", e);
         }
     }
 
     public boolean insert(List<Alert> alertList) {
-        try (Connection connection = jdbcHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ALERT)) {
-            if (alertList == null) {
-                return false;
-            }
-
+        try {
             for (Alert alert : alertList) {
-                preparedStatement.setInt(1, alert.getReport_id());
-                preparedStatement.setInt(2, alert.getRecord_id());
-                preparedStatement.setString(3, alert.getPhone_number());
-                preparedStatement.setString(4, alert.getAlert_type());
-                preparedStatement.setString(5, alert.getAdvice());
-                preparedStatement.setString(6, alert.getTitle());
-                preparedStatement.setString(7, alert.getAlert_date());
-                preparedStatement.setString(8, alert.getAlert_cycle());
-                preparedStatement.setString(9, alert.getIs_medicine());
-                preparedStatement.execute();
+                jdbcHelper.executeUpdate(INSERT_ALERT,
+                        alert.getReport_id(),
+                        alert.getRecord_id(),
+                        alert.getPhone_number(),
+                        alert.getAlert_type(),
+                        alert.getAdvice(),
+                        alert.getTitle(),
+                        alert.getAlert_date(),
+                        alert.getAlert_cycle(),
+                        alert.getIs_medicine()
+                );
             }
             return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Insert alerts failed", e);
         }
     }
 

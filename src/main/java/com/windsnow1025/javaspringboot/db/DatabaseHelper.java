@@ -16,8 +16,6 @@ public abstract class DatabaseHelper {
     protected static String dbDriverClassName;
     protected static String dbVersion;
 
-    private Connection connection;
-
     public DatabaseHelper() {
         try {
             setDatabaseConfig();
@@ -30,12 +28,12 @@ public abstract class DatabaseHelper {
             config.setDriverClassName(dbDriverClassName);
             dataSource = new HikariDataSource(config);
 
-            connection = getConnection();
+            // Version control
             String currentVersion = selectVersion();
             if (currentVersion == null) {
-                onCreate(connection);
+                onCreate();
             } else if (!currentVersion.equals(dbVersion)) {
-                onUpgrade(connection);
+                onUpgrade();
             }
         } catch (SQLException e) {
             logger.error("Database connection failed", e);
@@ -49,14 +47,14 @@ public abstract class DatabaseHelper {
     }
 
     // To be overridden
-    protected void onCreate(Connection connection) throws SQLException {
+    protected void onCreate() throws SQLException {
         createMetadata();
         insertVersion();
         logger.info("Database created");
     }
 
     // To be overridden
-    protected void onUpgrade(Connection connection) throws SQLException {
+    protected void onUpgrade() throws SQLException {
         updateVersion();
         logger.info("Database upgraded");
     }
@@ -67,7 +65,7 @@ public abstract class DatabaseHelper {
                     version VARCHAR(255)
                 );
                 """;
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = getConnection().createStatement()) {
             statement.executeUpdate(CREATE_METADATA);
         }
     }
@@ -76,14 +74,14 @@ public abstract class DatabaseHelper {
         final String DROP_METADATA = """
                 DROP TABLE IF EXISTS metadata
                 """;
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = getConnection().createStatement()) {
             statement.executeUpdate(DROP_METADATA);
         }
     }
 
     protected String selectVersion() {
         final String SELECT_METADATA = "SELECT version FROM metadata";
-        try (Statement statement = connection.createStatement();
+        try (Statement statement = getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_METADATA)) {
             if (resultSet.next()) {
                 return resultSet.getString("version");
@@ -99,7 +97,7 @@ public abstract class DatabaseHelper {
         final String INSERT_METADATA = """
                 INSERT INTO metadata (version) VALUES (?)
                 """;
-        try (PreparedStatement insertStatement = connection.prepareStatement(INSERT_METADATA)) {
+        try (PreparedStatement insertStatement = getConnection().prepareStatement(INSERT_METADATA)) {
             insertStatement.setString(1, dbVersion);
             insertStatement.executeUpdate();
         }
@@ -109,15 +107,9 @@ public abstract class DatabaseHelper {
         final String UPDATE_METADATA = """
                 UPDATE metadata SET version = ?
                 """;
-        try (PreparedStatement updateStatement = connection.prepareStatement(UPDATE_METADATA)) {
+        try (PreparedStatement updateStatement = getConnection().prepareStatement(UPDATE_METADATA)) {
             updateStatement.setString(1, dbVersion);
             updateStatement.executeUpdate();
-        }
-    }
-
-    public void closeConnection() throws SQLException {
-        if (connection != null) {
-            connection.close();
         }
     }
 }

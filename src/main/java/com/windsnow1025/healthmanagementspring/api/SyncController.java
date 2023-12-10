@@ -1,11 +1,11 @@
-package com.windsnow1025.javaspringboot.api;
+package com.windsnow1025.healthmanagementspring.api;
 
-import com.windsnow1025.javaspringboot.db.AlertDAO;
-import com.windsnow1025.javaspringboot.db.RecordDAO;
-import com.windsnow1025.javaspringboot.db.ReportDAO;
-import com.windsnow1025.javaspringboot.model.Alert;
-import com.windsnow1025.javaspringboot.model.Record;
-import com.windsnow1025.javaspringboot.model.Report;
+import com.windsnow1025.healthmanagementspring.db.AlertDAO;
+import com.windsnow1025.healthmanagementspring.db.RecordDAO;
+import com.windsnow1025.healthmanagementspring.db.ReportDAO;
+import com.windsnow1025.healthmanagementspring.model.Alert;
+import com.windsnow1025.healthmanagementspring.model.Record;
+import com.windsnow1025.healthmanagementspring.model.Report;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;

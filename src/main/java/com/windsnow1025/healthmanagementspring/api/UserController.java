@@ -1,8 +1,8 @@
-package com.windsnow1025.javaspringboot.api;
+package com.windsnow1025.healthmanagementspring.api;
 
-import com.windsnow1025.javaspringboot.db.JDBCHelper;
-import com.windsnow1025.javaspringboot.db.UserDAO;
-import com.windsnow1025.javaspringboot.model.User;
+import com.windsnow1025.healthmanagementspring.db.JDBCHelper;
+import com.windsnow1025.healthmanagementspring.db.UserDAO;
+import com.windsnow1025.healthmanagementspring.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

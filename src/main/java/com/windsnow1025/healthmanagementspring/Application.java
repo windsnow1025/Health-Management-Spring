@@ -1,13 +1,13 @@
-package com.windsnow1025.javaspringboot;
+package com.windsnow1025.healthmanagementspring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JavaSpringBootApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(JavaSpringBootApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

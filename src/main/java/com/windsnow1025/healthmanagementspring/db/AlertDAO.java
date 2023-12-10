@@ -1,6 +1,6 @@
-package com.windsnow1025.javaspringboot.db;
+package com.windsnow1025.healthmanagementspring.db;
 
-import com.windsnow1025.javaspringboot.model.Alert;
+import com.windsnow1025.healthmanagementspring.model.Alert;
 
 import java.sql.*;
 import java.util.*;

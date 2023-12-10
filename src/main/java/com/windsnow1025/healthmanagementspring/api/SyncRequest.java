@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot.api;
+package com.windsnow1025.healthmanagementspring.api;
 
 
 import java.util.List;

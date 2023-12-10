@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot.db;
+package com.windsnow1025.healthmanagementspring.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

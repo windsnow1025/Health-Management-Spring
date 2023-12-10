@@ -1,4 +1,4 @@
-package com.windsnow1025.javaspringboot.model;
+package com.windsnow1025.healthmanagementspring.model;
 
 
 public class Report {

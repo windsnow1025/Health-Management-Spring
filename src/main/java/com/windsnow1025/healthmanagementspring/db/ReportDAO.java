@@ -1,7 +1,7 @@
-package com.windsnow1025.javaspringboot.db;
+package com.windsnow1025.healthmanagementspring.db;
 
-import com.windsnow1025.javaspringboot.api.SyncController;
-import com.windsnow1025.javaspringboot.model.Report;
+import com.windsnow1025.healthmanagementspring.api.SyncController;
+import com.windsnow1025.healthmanagementspring.model.Report;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

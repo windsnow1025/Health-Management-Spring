@@ -8,6 +8,49 @@ JAVA 21
 
 ## API Examples
 
+### user/signup
+
+```json
+{
+    "phone_number": "12345678901",
+    "password": "123456",
+    "sex": "male",
+    "birthday": "2020-12-12"
+}
+```
+
+### sync/update/record
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "phone_number": "12345678901",
+            "record_date": "2020-12-12",
+            "hospital": "大医院",
+            "doctor": "小医生",
+            "organ": "brain",
+            "symptom": "头痛",
+            "conclusion": "脑子有问题",
+            "suggestion": "割了"
+        },
+        {
+            "id": 2,
+            "phone_number": "12345678901",
+            "record_date": "2023-12-2",
+            "hospital": "small hospital",
+            "doctor": "bad doctor",
+            "organ": "liver",
+            "symptom": "liver black",
+            "conclusion": "liver dead",
+            "suggestion": "liver to be removed"
+        }
+    ],
+    "phone_number": "12345678901"
+}
+```
+
 ### sync/update/report
 
 ```json
@@ -30,6 +73,28 @@ JAVA 21
             "report_type": "type a",
             "picture": "",
             "detail": "ddd"
+        }
+    ],
+    "phone_number": "12345678901"
+}
+```
+
+### sync/update/alert
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "record_id": 1,
+            "report_id": 0,
+            "phone_number": "12345678901",
+            "alert_type": "brain",
+            "advice": "割了",
+            "title": "ddd",
+            "alert_date": "14:31",
+            "alert_cycle": "周一 周二 ",
+            "is_medicine": "true"
         }
     ],
     "phone_number": "12345678901"

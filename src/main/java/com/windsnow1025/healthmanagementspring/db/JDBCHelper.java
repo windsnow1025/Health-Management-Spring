@@ -75,7 +75,7 @@ public class JDBCHelper extends DatabaseHelper {
 
     @Override
     public void setDatabaseConfig() {
-        dbUrl = "jdbc:mysql://learn-android-mysql:3306/" + System.getenv("MYSQL_DATABASE");
+        dbUrl = "jdbc:mysql://learn-mysql:3306/" + System.getenv("MYSQL_DATABASE");
         dbUsername = System.getenv("MYSQL_USER");
         dbPassword = System.getenv("MYSQL_PASSWORD");
         dbDriverClassName = "com.mysql.cj.jdbc.Driver";

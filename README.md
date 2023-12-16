@@ -8,7 +8,7 @@ JAVA 21
 
 ## API Examples
 
-### user/signup
+### POST: user/signup
 
 ```json
 {
@@ -19,7 +19,7 @@ JAVA 21
 }
 ```
 
-### sync/update/record
+### PUT: sync/update/record
 
 ```json
 {
@@ -51,7 +51,7 @@ JAVA 21
 }
 ```
 
-### sync/update/report
+### PUT: sync/update/report
 
 ```json
 {
@@ -79,7 +79,7 @@ JAVA 21
 }
 ```
 
-### sync/update/alert
+### PUT: sync/update/alert
 
 ```json
 {

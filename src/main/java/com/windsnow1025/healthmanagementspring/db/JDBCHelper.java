@@ -71,7 +71,7 @@ public class JDBCHelper extends DatabaseHelper {
 
     private static JDBCHelper instance;
 
-    public JDBCHelper() {
+    private JDBCHelper() {
         super();
     }
 

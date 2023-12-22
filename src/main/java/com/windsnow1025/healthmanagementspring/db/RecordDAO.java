@@ -21,7 +21,7 @@ public class RecordDAO {
     private JDBCHelper jdbcHelper;
 
     public RecordDAO() {
-        this.jdbcHelper = new JDBCHelper();
+        jdbcHelper = JDBCHelper.getInstance();
     }
 
     public List<Record> select(String phoneNumber) {

@@ -28,7 +28,7 @@ public class ReportDAO {
     private JDBCHelper jdbcHelper;
 
     public ReportDAO() {
-        this.jdbcHelper = new JDBCHelper();
+        jdbcHelper = JDBCHelper.getInstance();
     }
 
     public List<Report> select(String phoneNumber) {

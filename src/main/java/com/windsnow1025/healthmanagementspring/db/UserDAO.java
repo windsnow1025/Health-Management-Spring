@@ -40,8 +40,8 @@ public class UserDAO {
 
     private JDBCHelper jdbcHelper;
 
-    public UserDAO(JDBCHelper jdbcHelper) {
-        this.jdbcHelper = jdbcHelper;
+    public UserDAO() {
+        jdbcHelper = JDBCHelper.getInstance();
     }
 
     public User signin(String phoneNumber, String password) {

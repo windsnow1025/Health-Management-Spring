@@ -16,8 +16,7 @@ public class UserController {
     private final UserDAO userDAO;
 
     public UserController() {
-        JDBCHelper jdbcHelper = new JDBCHelper();
-        this.userDAO = new UserDAO(jdbcHelper);
+        this.userDAO = new UserDAO();
     }
 
     @GetMapping("/info")

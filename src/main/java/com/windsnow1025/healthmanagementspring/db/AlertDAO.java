@@ -23,7 +23,7 @@ public class AlertDAO {
     private JDBCHelper jdbcHelper;
 
     public AlertDAO() {
-        this.jdbcHelper = new JDBCHelper();
+        jdbcHelper = JDBCHelper.getInstance();
     }
 
     public List<Alert> select(String phoneNumber) {

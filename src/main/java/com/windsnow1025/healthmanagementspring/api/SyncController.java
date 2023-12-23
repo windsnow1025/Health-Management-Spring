@@ -1,8 +1,8 @@
 package com.windsnow1025.healthmanagementspring.api;
 
-import com.windsnow1025.healthmanagementspring.db.AlertDAO;
-import com.windsnow1025.healthmanagementspring.db.RecordDAO;
-import com.windsnow1025.healthmanagementspring.db.ReportDAO;
+import com.windsnow1025.healthmanagementspring.dao.AlertDAO;
+import com.windsnow1025.healthmanagementspring.dao.RecordDAO;
+import com.windsnow1025.healthmanagementspring.dao.ReportDAO;
 import com.windsnow1025.healthmanagementspring.model.Alert;
 import com.windsnow1025.healthmanagementspring.model.Record;
 import com.windsnow1025.healthmanagementspring.model.Report;

@@ -1,7 +1,6 @@
 package com.windsnow1025.healthmanagementspring.api;
 
-import com.windsnow1025.healthmanagementspring.db.JDBCHelper;
-import com.windsnow1025.healthmanagementspring.db.UserDAO;
+import com.windsnow1025.healthmanagementspring.dao.UserDAO;
 import com.windsnow1025.healthmanagementspring.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

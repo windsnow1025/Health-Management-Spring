@@ -1,7 +1,8 @@
-package com.windsnow1025.healthmanagementspring.db;
+package com.windsnow1025.healthmanagementspring.dao;
 
 import com.windsnow1025.healthmanagementspring.api.SyncController;
 import com.windsnow1025.healthmanagementspring.model.Report;
+import com.windsnow1025.healthmanagementspring.util.JDBCHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

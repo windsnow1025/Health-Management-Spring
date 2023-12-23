@@ -1,6 +1,7 @@
-package com.windsnow1025.healthmanagementspring.db;
+package com.windsnow1025.healthmanagementspring.dao;
 
 import com.windsnow1025.healthmanagementspring.model.User;
+import com.windsnow1025.healthmanagementspring.util.JDBCHelper;
 
 import java.sql.*;
 import java.util.*;

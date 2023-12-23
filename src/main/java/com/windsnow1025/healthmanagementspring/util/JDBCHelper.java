@@ -1,4 +1,4 @@
-package com.windsnow1025.healthmanagementspring.db;
+package com.windsnow1025.healthmanagementspring.util;
 
 import java.sql.*;
 

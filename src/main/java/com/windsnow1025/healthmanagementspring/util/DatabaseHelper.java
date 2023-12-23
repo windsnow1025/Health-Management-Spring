@@ -1,4 +1,4 @@
-package com.windsnow1025.healthmanagementspring.db;
+package com.windsnow1025.healthmanagementspring.util;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -109,7 +109,6 @@ public abstract class DatabaseHelper {
                 return null;
             }
         } catch (SQLException e) {
-            logger.error("Error selecting version", e);
             return null;
         }
     }

@@ -1,0 +1,5 @@
+{
+    "database_url": "jdbc:mysql://localhost:3307/android",
+    "database_username": "android_user",
+    "database_password": "android_password"
+}
